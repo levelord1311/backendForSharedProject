@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	j "backendForSharedProject/src/jwt"
+	j "backendForSharedProject/internal/jwt"
 	"encoding/json"
 	"fmt"
 	"net/http"
