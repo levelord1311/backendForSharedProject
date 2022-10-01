@@ -45,7 +45,7 @@
     "configurable.GoLibrariesConfigurable.is.expanded": "true",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "C:/Users/dev",
+    "last_opened_file_path": "C:/Users/dev/Documents/GitHub/backendForSharedProject/example/httpsServer",
     "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
   },
   "keyToStringList": {
@@ -55,6 +55,9 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\dev\Documents\GitHub\backendForSharedProject\example\httpsServer" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\dev\Documents\GitHub\backendForSharedProject\internal" />
       <recent name="C:\Users\dev\Documents\GitHub\backendForSharedProject\example" />

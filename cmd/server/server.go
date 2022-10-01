@@ -16,15 +16,43 @@ func main() {
 	//загрузка главного конфига
 	mainConfig, err := c.LoadMainConfig("../../config")
 	if err != nil {
-		fmt.Println("error reading main config:", err)
+		log.Println("error reading main config:", err)
 		os.Exit(1)
 	}
-	fmt.Println("mainConfig", mainConfig)
+	log.Println("mainConfig", mainConfig)
 
+	//генерация нового сертификата и ключа
+	//https.CreateCertAndKey()
+
+	//подключение к БД
+	db := connectToDB(mainConfig.Path)
+	//??? нужно ли обрабатывать ошибки при закрытии элементов при помощи defer в main() программе?
+	defer func() {
+		if err := db.Close(); err != nil {
+			panic(err)
+		}
+	}()
+
+	http.HandleFunc("/home", j.VerifyJWT(h.HandlePage))
+	http.HandleFunc("/", h.DefaultHandler)
+	http.HandleFunc("/auth", h.AuthPage)
+
+	port := mainConfig.Port
+	//if err := http.ListenAndServe(port, nil); err != nil {
+	//	log.Printf("Error listening to port %s: %s", port, err)
+	//}
+
+	if err := http.ListenAndServeTLS(port, "./cert.pem", "./key.pem", nil); err != nil {
+		log.Printf("Error listening to port %s: %s", port, err)
+		os.Exit(5)
+	}
+}
+
+func connectToDB(path string) *sql.DB {
 	//загрузка конфига с параметрами БД
-	psqlConfig, err := c.LoadPSQLConfig(mainConfig.Path)
+	psqlConfig, err := c.LoadPSQLConfig(path)
 	if err != nil {
-		fmt.Println("error reading psql config:", err)
+		log.Println("error reading psql config:", err)
 		os.Exit(2)
 	}
 
@@ -36,31 +64,16 @@ func main() {
 	//открытие БД
 	db, err := sql.Open("postgres", psqlConnectionString)
 	if err != nil {
-		fmt.Println("error opening database:", err)
+		log.Println("error opening database:", err)
 		os.Exit(3)
 	}
-	//??? нужно ли обрабатывать ошибки при закрытии элементов при помощи defer в main() программе?
-	defer func() {
-		if err := db.Close(); err != nil {
-			panic(err)
-		}
-	}()
 
 	//подключение к БД
 	err = db.Ping()
 	if err != nil {
-		fmt.Println("error connecting to database:", err)
+		log.Println("error connecting to database:", err)
 		os.Exit(4)
 	}
-	fmt.Println("DB successfully connected.")
-
-	http.HandleFunc("/home", j.VerifyJWT(h.HandlePage))
-	http.HandleFunc("/", h.DefaultHandler)
-	http.HandleFunc("/auth", h.AuthPage)
-
-	port := ":8080"
-	if err := http.ListenAndServe(port, nil); err != nil {
-		log.Printf("Error listening to port %s : %s", port, err)
-	}
-
+	log.Println("DB successfully connected.")
+	return db
 }

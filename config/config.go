@@ -20,6 +20,7 @@ type JWTConfig struct {
 
 type Config struct {
 	Path string `mapstructure:"CONFIG_PATH"`
+	Port string `mapstructure:"SERVER_PORT"`
 }
 
 func LoadMainConfig(path string) (config Config, err error) {
