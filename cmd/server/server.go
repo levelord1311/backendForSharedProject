@@ -33,18 +33,21 @@ func main() {
 		}
 	}()
 
+	//конкурентный запуск http сервера для редиректа на https соединение
+	go func() {
+		if err := http.ListenAndServe(mainConfig.HttpPort, http.HandlerFunc(h.RedirectToTls)); err != nil {
+			log.Printf("Error listening to http port %s	: %s", mainConfig.HttpsPort, err)
+			os.Exit(5)
+		}
+	}()
+
 	http.HandleFunc("/home", j.VerifyJWT(h.HandlePage))
 	http.HandleFunc("/", h.DefaultHandler)
-	http.HandleFunc("/auth", h.AuthPage)
+	http.HandleFunc("/auth", h.AuthorizationHandler)
 
-	port := mainConfig.Port
-	//if err := http.ListenAndServe(port, nil); err != nil {
-	//	log.Printf("Error listening to port %s: %s", port, err)
-	//}
-
-	if err := http.ListenAndServeTLS(port, "./cert.pem", "./key.pem", nil); err != nil {
-		log.Printf("Error listening to port %s: %s", port, err)
-		os.Exit(5)
+	if err := http.ListenAndServeTLS(mainConfig.HttpsPort, "./cert.pem", "./key.pem", nil); err != nil {
+		log.Printf("Error listening to https port %s	: %s", mainConfig.HttpsPort, err)
+		os.Exit(6)
 	}
 }
 

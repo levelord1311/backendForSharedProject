@@ -1,0 +1,1 @@
+Not application usage examples, rather code blocks examples for different features to help me with development.
