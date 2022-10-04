@@ -11,12 +11,6 @@ type Authn struct {
 }
 
 type MalformedRequest struct {
-	status int
-	msg    string
-}
-
-type User struct {
-	id                int
-	login             string
-	encryptedPassword string
+	Status int
+	Msg    string
 }

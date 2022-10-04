@@ -4,8 +4,7 @@ import (
 	c "backendForSharedProject/config"
 	h "backendForSharedProject/internal/handlers"
 	j "backendForSharedProject/internal/jwt"
-	"database/sql"
-	"fmt"
+	"backendForSharedProject/internal/store"
 	_ "github.com/lib/pq"
 	"log"
 	"net/http"
@@ -25,7 +24,7 @@ func main() {
 	//https.CreateCertAndKey()
 
 	//подключение к БД
-	db := connectToDB(mainConfig.Path)
+	db := store.ConnectToDB(mainConfig.Path)
 	//??? нужно ли обрабатывать ошибки при закрытии элементов при помощи defer в main() программе?
 	defer func() {
 		if err := db.Close(); err != nil {
@@ -40,43 +39,14 @@ func main() {
 			os.Exit(5)
 		}
 	}()
+	datab := store.Database{db}
 
 	http.HandleFunc("/home", j.VerifyJWT(h.HandlePage))
 	http.HandleFunc("/", h.DefaultHandler)
-	http.HandleFunc("/auth", h.AuthorizationHandler)
+	http.HandleFunc("/auth", datab.AuthorizationHandler)
 
 	if err := http.ListenAndServeTLS(mainConfig.HttpsPort, "./cert.pem", "./key.pem", nil); err != nil {
 		log.Printf("Error listening to https port %s	: %s", mainConfig.HttpsPort, err)
 		os.Exit(6)
 	}
-}
-
-func connectToDB(path string) *sql.DB {
-	//загрузка конфига с параметрами БД
-	psqlConfig, err := c.LoadPSQLConfig(path)
-	if err != nil {
-		log.Println("error reading psql config:", err)
-		os.Exit(2)
-	}
-
-	//форматирование параметров для подключения к БД
-	psqlConnectionString := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		psqlConfig.Host, psqlConfig.Port, psqlConfig.User, psqlConfig.Password, psqlConfig.DBName)
-
-	//открытие БД
-	db, err := sql.Open("postgres", psqlConnectionString)
-	if err != nil {
-		log.Println("error opening database:", err)
-		os.Exit(3)
-	}
-
-	//подключение к БД
-	err = db.Ping()
-	if err != nil {
-		log.Println("error connecting to database:", err)
-		os.Exit(4)
-	}
-	log.Println("DB successfully connected.")
-	return db
 }

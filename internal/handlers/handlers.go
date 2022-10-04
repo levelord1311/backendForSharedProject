@@ -3,7 +3,6 @@ package handlers
 import (
 	j "backendForSharedProject/internal/jwt"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"net"
@@ -47,29 +46,4 @@ func RedirectToTls(w http.ResponseWriter, r *http.Request) {
 	u.Scheme = "https"
 	log.Println(u.String())
 	http.Redirect(w, r, u.String(), http.StatusMovedPermanently)
-}
-
-func AuthorizationHandler(w http.ResponseWriter, r *http.Request) {
-	var a Authn
-	err := DecodeJSONBody(w, r, &a)
-	if err != nil {
-		var mr *MalformedRequest
-		if errors.As(err, &mr) {
-			http.Error(w, mr.msg, mr.status)
-		} else {
-			log.Println(err.Error())
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		}
-		return
-	}
-	fmt.Fprintf(w, "cheking login: %+v\n", a.Login)
-
-	// encrypt password
-	encrPass, err := HashPassword(a.Password)
-	if err != nil {
-		err := "Password Encryption  failed"
-		fmt.Println(err)
-	}
-	fmt.Fprintf(w, "hashed pw: %+v\n", encrPass)
-
 }

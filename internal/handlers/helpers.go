@@ -14,7 +14,7 @@ import (
 
 // helper function
 func (mr *MalformedRequest) Error() string {
-	return mr.msg
+	return mr.Msg
 }
 
 func DecodeJSONBody(w http.ResponseWriter, r *http.Request, dst interface{}) error {
@@ -23,8 +23,8 @@ func DecodeJSONBody(w http.ResponseWriter, r *http.Request, dst interface{}) err
 		if value != "application/json" {
 			msg := "Content-Type header is not application/json"
 			return &MalformedRequest{
-				status: http.StatusUnsupportedMediaType,
-				msg:    msg,
+				Status: http.StatusUnsupportedMediaType,
+				Msg:    msg,
 			}
 		}
 	}
