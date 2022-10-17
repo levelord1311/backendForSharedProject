@@ -1,6 +1,6 @@
 package store
 
-import "github.com/levelord1311/HTTP-REST-API.git/internal/app/model"
+import "backendForSharedProject/internal/app/model"
 
 type UserRepository interface {
 	Create(user *model.User) error

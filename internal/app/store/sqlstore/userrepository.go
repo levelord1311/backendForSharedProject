@@ -1,9 +1,9 @@
 package sqlstore
 
 import (
+	"backendForSharedProject/internal/app/model"
+	"backendForSharedProject/internal/app/store"
 	"database/sql"
-	"github.com/levelord1311/HTTP-REST-API.git/internal/app/model"
-	"github.com/levelord1311/HTTP-REST-API.git/internal/app/store"
 )
 
 type UserRepository struct {

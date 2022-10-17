@@ -1,10 +1,9 @@
 package main
 
 import (
+	"backendForSharedProject/internal/app/apiserver"
 	"flag"
 	"github.com/BurntSushi/toml"
-
-	"github.com/levelord1311/HTTP-REST-API.git/internal/app/apiserver"
 	"log"
 	"os"
 )

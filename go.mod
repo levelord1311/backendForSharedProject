@@ -1,5 +1,4 @@
-module github.com/levelord1311/HTTP-REST-API.git
-
+module backendForSharedProject
 
 go 1.19
 
@@ -11,6 +10,5 @@ require (
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/gorilla/sessions v1.2.1 // indirect
 	github.com/lib/pq v1.10.7 // indirect
-	golang.org/x/crypto v0.0.0-20221005025214-4161e89ecf1b // indirect
-
+	golang.org/x/crypto v0.0.0-20221012134737-56aed061732a // indirect
 )

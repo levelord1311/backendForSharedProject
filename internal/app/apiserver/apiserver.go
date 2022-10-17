@@ -3,7 +3,7 @@ package apiserver
 import (
 	"database/sql"
 	"github.com/gorilla/sessions"
-	"github.com/levelord1311/HTTP-REST-API.git/internal/app/store/sqlstore"
+	"backendForSharedProject/internal/app/store/sqlstore"
 	"log"
 	"net/http"
 )

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal" created-in="GO-221.5921.26">
-    <data-source name="rest_api@localhost" uuid="de851c16-d97e-4ae9-83ee-d7e707ad1b9d">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" exact-version="0" />
-      <secret-storage>forget</secret-storage>
+    <data-source name="u1803158_default" uuid="6bf171cd-3b39-40a2-8fb6-a73a4cbfb42c">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MYSQL" exact-version="0" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>u1803158_default</user-name>
       <schema-mapping />
     </data-source>
   </component>

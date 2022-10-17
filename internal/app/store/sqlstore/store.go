@@ -2,7 +2,7 @@ package sqlstore
 
 import (
 	"database/sql"
-	"github.com/levelord1311/HTTP-REST-API.git/internal/app/store"
+	"backendForSharedProject/internal/app/store"
 	_ "github.com/lib/pq"
 )
 
