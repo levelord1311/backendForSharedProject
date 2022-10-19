@@ -46,17 +46,17 @@ func main() {
 	//	}
 	//}()
 	//
-	//запуск TLS сервера
-	//if err := apiserver.StartTLS(config); err != nil {
-	//	log.Println("error starting TLS server: ", err)
-	//	os.Exit(2)
-	//} else {
-	//	log.Println("OK")
-	//}
+	//запуск главного TLS сервера
+	if err := apiserver.StartTLS(config); err != nil {
+		log.Println("error starting TLS server: ", err)
+		os.Exit(2)
+	} else {
+		log.Println("OK")
+	}
 
 	//запуск главного HTTP сервера
-	if err := apiserver.StartMainHTTP(config); err != nil {
-		log.Println("error starting http server: ", err)
-		os.Exit(1)
-	}
+	//if err := apiserver.StartMainHTTP(config); err != nil {
+	//	log.Println("error starting http server: ", err)
+	//	os.Exit(1)
+	//}
 }
