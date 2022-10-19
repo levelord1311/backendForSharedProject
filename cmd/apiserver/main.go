@@ -17,7 +17,7 @@ func main() {
 	if databaseURL == "" {
 		log.Fatal("&DATABASE_URL must be set")
 	}
-	log.Println("databaseURL variable:", port)
+	log.Println("databaseURL variable:", databaseURL)
 
 	sessionKey := os.Getenv("SESSION_KEY")
 	if sessionKey == "" {
@@ -25,7 +25,7 @@ func main() {
 	}
 
 	config := &apiserver.Config{
-		BindAddr:    port,
+		BindAddr:    ":" + port,
 		DatabaseURL: databaseURL,
 		SessionKey:  sessionKey,
 	}
