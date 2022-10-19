@@ -25,8 +25,8 @@ func StartMainHTTP(config *Config) error {
 	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
 
 	log.Println("Starting main HTTP server...")
-	s := newTLSServer(store, sessionStore)
-	return http.ListenAndServeTLS(config.TLSAddr, config.Cert, config.Key, s)
+	s := newServer(store, sessionStore)
+	return http.ListenAndServe(config.BindAddr, s)
 
 }
 
@@ -41,7 +41,7 @@ func StartTLS(config *Config) error {
 	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
 
 	log.Println("Starting TLS server...")
-	s := newTLSServer(store, sessionStore)
+	s := newServer(store, sessionStore)
 	return http.ListenAndServeTLS(config.TLSAddr, config.Cert, config.Key, s)
 }
 

@@ -27,19 +27,7 @@ var (
 	errIncorrectEmailOrPassword = errors.New("incorrect email or password")
 )
 
-func newHTTPServer(store store.Store, sessionStore sessions.Store) *server {
-	s := &server{
-		router:       mux.NewRouter(),
-		store:        store,
-		sessionStore: sessionStore,
-	}
-
-	s.configureRouter()
-
-	return s
-}
-
-func newTLSServer(store store.Store, sessionStore sessions.Store) *server {
+func newServer(store store.Store, sessionStore sessions.Store) *server {
 	s := &server{
 		router:       mux.NewRouter(),
 		store:        store,
