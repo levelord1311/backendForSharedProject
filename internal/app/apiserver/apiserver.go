@@ -1,9 +1,9 @@
 package apiserver
 
 import (
+	"backendForSharedProject/internal/app/store/sqlstore"
 	"database/sql"
 	"github.com/gorilla/sessions"
-	"backendForSharedProject/internal/app/store/sqlstore"
 	"log"
 	"net/http"
 )
@@ -31,7 +31,7 @@ func StartTLS(config *Config) error {
 
 func newDB(databaseURL string) (*sql.DB, error) {
 	log.Println("Opening DB...")
-	db, err := sql.Open("postgres", databaseURL)
+	db, err := sql.Open("mysql", databaseURL)
 	if err != nil {
 		return nil, err
 	}

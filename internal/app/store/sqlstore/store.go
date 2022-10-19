@@ -1,9 +1,9 @@
 package sqlstore
 
 import (
-	"database/sql"
 	"backendForSharedProject/internal/app/store"
-	_ "github.com/lib/pq"
+	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Store struct {

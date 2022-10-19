@@ -21,9 +21,25 @@ func (r *UserRepository) Create(u *model.User) error {
 
 	queryString := `
 	INSERT INTO users (email, encrypted_password)
-	VALUES ($1, $2)
-	RETURNING id;`
-	return r.store.db.QueryRow(queryString, u.Email, u.EncryptedPassword).Scan(&u.ID)
+	VALUES (?, ?);`
+
+	stmt, err := r.store.db.Prepare(queryString)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.Exec(u.Email, u.EncryptedPassword)
+	if err != nil {
+		return err
+	}
+	retID, err := res.LastInsertId()
+	if err != nil {
+		return err
+	}
+
+	u.ID = int(retID)
+	return nil
 
 }
 
@@ -31,7 +47,7 @@ func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
 	queryString := `
 	SELECT id, email, encrypted_password
 	FROM users
-	WHERE email = $1;`
+	WHERE email = ?;`
 	u := &model.User{}
 	if err := r.store.db.QueryRow(queryString, email).Scan(
 		&u.ID,
