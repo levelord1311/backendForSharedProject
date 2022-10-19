@@ -1,1 +1,1 @@
-web: cmd/apiserver/main
+web: apiserver
