@@ -1,12 +1,13 @@
 package apiserver
 
 import (
-	"encoding/json"
-	"errors"
-	"github.com/gorilla/mux"
-	"github.com/gorilla/sessions"
 	"backendForSharedProject/internal/app/model"
 	"backendForSharedProject/internal/app/store"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 	"log"
 	"net"
 	"net/http"
@@ -26,6 +27,18 @@ var (
 	errIncorrectEmailOrPassword = errors.New("incorrect email or password")
 )
 
+func newHTTPServer(store store.Store, sessionStore sessions.Store) *server {
+	s := &server{
+		router:       mux.NewRouter(),
+		store:        store,
+		sessionStore: sessionStore,
+	}
+
+	s.configureRouter()
+
+	return s
+}
+
 func newTLSServer(store store.Store, sessionStore sessions.Store) *server {
 	s := &server{
 		router:       mux.NewRouter(),
@@ -33,7 +46,7 @@ func newTLSServer(store store.Store, sessionStore sessions.Store) *server {
 		sessionStore: sessionStore,
 	}
 
-	s.configureTLSRouter()
+	s.configureRouter()
 
 	return s
 }
@@ -60,9 +73,16 @@ func redirectToTls(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, u.String(), http.StatusMovedPermanently)
 }
 
-func (s *server) configureTLSRouter() {
+func (s *server) configureRouter() {
+	s.router.HandleFunc("/", s.handleDefaultPage()).Methods("GET")
 	s.router.HandleFunc("/users", s.handleUsersCreate()).Methods("POST")
 	s.router.HandleFunc("/sessions", s.handleSessionsCreate()).Methods("POST")
+}
+
+func (s *server) handleDefaultPage() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello! This is default handler, now serving host: %s", r.Host)
+	}
 }
 
 func (s *server) handleUsersCreate() http.HandlerFunc {

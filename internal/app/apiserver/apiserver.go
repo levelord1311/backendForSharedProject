@@ -14,6 +14,22 @@ func StartHTTP(config *Config) error {
 
 }
 
+func StartMainHTTP(config *Config) error {
+	db, err := newDB(config.DatabaseURL)
+	if err != nil {
+		return err
+	}
+
+	defer db.Close()
+	store := sqlstore.New(db)
+	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
+
+	log.Println("Starting main HTTP server...")
+	s := newTLSServer(store, sessionStore)
+	return http.ListenAndServeTLS(config.TLSAddr, config.Cert, config.Key, s)
+
+}
+
 func StartTLS(config *Config) error {
 	db, err := newDB(config.DatabaseURL)
 	if err != nil {
