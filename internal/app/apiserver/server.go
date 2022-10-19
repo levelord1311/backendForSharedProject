@@ -62,7 +62,7 @@ func redirectToTls(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) configureRouter() {
-	s.router.HandleFunc("/", s.handleDefaultPage()).Methods("GET")
+	s.router.HandleFunc("/", s.handleDefaultPage())
 	s.router.HandleFunc("/users", s.handleUsersCreate()).Methods("POST")
 	s.router.HandleFunc("/sessions", s.handleSessionsCreate()).Methods("POST")
 }
