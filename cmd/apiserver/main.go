@@ -8,11 +8,24 @@ import (
 
 func main() {
 	port := os.Getenv("PORT")
-	databaseURL := os.Getenv("database_url")
+	if port == "" {
+		log.Fatal("$PORT must be set")
+	}
+
+	databaseURL := os.Getenv("DATABASE_URL")
+	if databaseURL == "" {
+		log.Fatal("&DATABASE_URL must be set")
+	}
+
+	sessionKey := os.Getenv("SESSION_KEY")
+	if sessionKey == "" {
+		log.Fatal("&SESSION_KEY must be set")
+	}
 
 	config := &apiserver.Config{
 		BindAddr:    port,
 		DatabaseURL: databaseURL,
+		SessionKey:  sessionKey,
 	}
 
 	//deprecated: HTTPS не поддерживается на бесплатном heroku
