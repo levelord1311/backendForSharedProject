@@ -11,11 +11,13 @@ func main() {
 	if port == "" {
 		log.Fatal("$PORT must be set")
 	}
+	log.Println("port variable:", port)
 
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
 		log.Fatal("&DATABASE_URL must be set")
 	}
+	log.Println("databaseURL variable:", port)
 
 	sessionKey := os.Getenv("SESSION_KEY")
 	if sessionKey == "" {
