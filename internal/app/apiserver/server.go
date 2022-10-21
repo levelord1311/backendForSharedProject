@@ -1,37 +1,33 @@
 package apiserver
 
 import (
+	"backendForSharedProject/internal/app/jwt"
 	"backendForSharedProject/internal/app/model"
 	"backendForSharedProject/internal/app/store"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/gorilla/sessions"
 	"log"
 	"net"
 	"net/http"
 )
 
 type server struct {
-	router       *mux.Router
-	store        store.Store
-	sessionStore sessions.Store
+	router *mux.Router
+	store  store.Store
+	jwtKey []byte
 }
-
-const (
-	sessionName = "default_session"
-)
 
 var (
 	errIncorrectEmailOrPassword = errors.New("incorrect email or password")
 )
 
-func newServer(store store.Store, sessionStore sessions.Store) *server {
+func newServer(store store.Store, jwtKey []byte) *server {
 	s := &server{
-		router:       mux.NewRouter(),
-		store:        store,
-		sessionStore: sessionStore,
+		router: mux.NewRouter(),
+		store:  store,
+		jwtKey: jwtKey,
 	}
 
 	s.configureRouter()
@@ -117,19 +113,13 @@ func (s *server) handleSessionsCreate() http.HandlerFunc {
 			return
 		}
 
-		session, err := s.sessionStore.Get(r, sessionName)
+		tokenString, err := jwt.GenerateJWT(u)
 		if err != nil {
 			s.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		session.Values["user_id"] = u.ID
-		if err := s.sessionStore.Save(r, w, session); err != nil {
-			s.error(w, r, http.StatusInternalServerError, err)
-			return
-		}
-
-		s.respond(w, r, http.StatusOK, nil)
+		s.respond(w, r, http.StatusOK, tokenString)
 
 	}
 }

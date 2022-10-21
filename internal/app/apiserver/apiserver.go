@@ -3,7 +3,6 @@ package apiserver
 import (
 	"backendForSharedProject/internal/app/store/sqlstore"
 	"database/sql"
-	"github.com/gorilla/sessions"
 	"log"
 	"net/http"
 )
@@ -22,10 +21,9 @@ func StartMainHTTP(config *Config) error {
 
 	defer db.Close()
 	store := sqlstore.New(db)
-	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
 
 	log.Println("Starting main HTTP server...")
-	s := newServer(store, sessionStore)
+	s := newServer(store, config.JwtKey)
 	return http.ListenAndServe(config.BindAddr, s)
 
 }
@@ -38,10 +36,9 @@ func StartTLS(config *Config) error {
 
 	defer db.Close()
 	store := sqlstore.New(db)
-	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
 
 	log.Println("Starting TLS server...")
-	s := newServer(store, sessionStore)
+	s := newServer(store, config.JwtKey)
 	return http.ListenAndServeTLS(config.TLSAddr, config.Cert, config.Key, s)
 }
 

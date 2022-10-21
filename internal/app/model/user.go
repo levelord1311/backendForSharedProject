@@ -16,11 +16,12 @@ type User struct {
 func (u *User) Validate() error {
 	return validation.ValidateStruct(u,
 		validation.Field(&u.Email, validation.Required, is.Email),
-		validation.Field(&u.Password, validation.By(RequiredIf(u.EncryptedPassword == "")), validation.Length(6, 100)),
+		validation.Field(&u.Password, validation.By(
+			RequiredIf(u.EncryptedPassword == "")),
+			validation.Length(6, 100)),
 	)
 }
 
-// BeforeCreate ...
 func (u *User) BeforeCreate() error {
 	if len(u.Password) > 0 {
 		enc, err := encryptString(u.Password)

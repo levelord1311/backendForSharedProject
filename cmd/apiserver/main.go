@@ -19,15 +19,15 @@ func main() {
 	}
 	log.Println("databaseURL variable:", databaseURL)
 
-	sessionKey := os.Getenv("SESSION_KEY")
-	if sessionKey == "" {
-		log.Fatal("&SESSION_KEY must be set")
+	jwtKey := []byte(os.Getenv("JWT_KEY"))
+	if jwtKey == nil {
+		log.Fatal("&JWT_KEY must be set")
 	}
 
 	config := &apiserver.Config{
 		BindAddr:    ":" + port,
 		DatabaseURL: databaseURL,
-		SessionKey:  sessionKey,
+		JwtKey:      jwtKey,
 	}
 
 	//deprecated: HTTPS не поддерживается на бесплатном heroku
