@@ -195,6 +195,7 @@ func (s *server) handleGoogleCallback() http.HandlerFunc {
 			}
 
 			s.respond(w, r, http.StatusCreated, tokenString)
+			return
 
 		} else if err != nil {
 			s.error(w, r, http.StatusInternalServerError, err)
