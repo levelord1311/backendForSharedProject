@@ -177,6 +177,12 @@ func (s *server) handleGoogleCallback() http.HandlerFunc {
 				return
 			}
 
+			u := &model.User{
+				Email:      googleInfo.Email,
+				GivenName:  googleInfo.GivenName,
+				FamilyName: googleInfo.FamilyName,
+			}
+
 			if err := s.store.User().CreateWithGoogle(u); err != nil {
 				s.error(w, r, http.StatusInternalServerError, err)
 				return
