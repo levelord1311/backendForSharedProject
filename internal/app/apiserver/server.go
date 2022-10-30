@@ -62,6 +62,7 @@ func (s *server) configureRouter() {
 	s.router.HandleFunc("/users", s.handleUsersCreate()).Methods("POST")
 	s.router.HandleFunc("/auth", s.handleJWTCreate()).Methods("POST")
 	s.router.HandleFunc("/auth/google", s.handleRedirectToGoogleLogin())
+	s.router.HandleFunc("/auth/google/callback", s.handleGoogleCallback())
 }
 
 func (s *server) handleDefaultPage() http.HandlerFunc {
