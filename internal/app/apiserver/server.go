@@ -23,11 +23,11 @@ var (
 	errIncorrectEmailOrPassword = errors.New("incorrect email or password")
 )
 
-func newServer(store store.Store, jwtKey []byte) *server {
+func newServer(store store.Store, config *Config) *server {
 	s := &server{
 		router: mux.NewRouter(),
 		store:  store,
-		jwtKey: jwtKey,
+		jwtKey: config.JwtKey,
 	}
 
 	s.configureRouter()
@@ -60,7 +60,8 @@ func redirectToTls(w http.ResponseWriter, r *http.Request) {
 func (s *server) configureRouter() {
 	s.router.HandleFunc("/", s.handleDefaultPage())
 	s.router.HandleFunc("/users", s.handleUsersCreate()).Methods("POST")
-	s.router.HandleFunc("/sessions", s.handleSessionsCreate()).Methods("POST")
+	s.router.HandleFunc("/auth", s.handleJWTCreate()).Methods("POST")
+	s.router.HandleFunc("/auth/google", s.handleRedirectToGoogleLogin())
 }
 
 func (s *server) handleDefaultPage() http.HandlerFunc {
@@ -95,7 +96,7 @@ func (s *server) handleUsersCreate() http.HandlerFunc {
 	}
 }
 
-func (s *server) handleSessionsCreate() http.HandlerFunc {
+func (s *server) handleJWTCreate() http.HandlerFunc {
 	type request struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
@@ -120,6 +121,87 @@ func (s *server) handleSessionsCreate() http.HandlerFunc {
 		}
 
 		s.respond(w, r, http.StatusOK, tokenString)
+
+	}
+}
+
+func (s *server) handleRedirectToGoogleLogin() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		state := generateStateOauthCookie(w)
+		url := GoogleOauthConfig.AuthCodeURL(state)
+		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+	}
+}
+
+func (s *server) handleGoogleCallback() http.HandlerFunc {
+	type GoogleInfo struct {
+		Sub           string `json:"sub"`
+		Name          string `json:"name"`
+		GivenName     string `json:"given_name"`
+		FamilyName    string `json:"family_name"`
+		Picture       string `json:"picture"`
+		Email         string `json:"email"`
+		EmailVerified bool   `json:"email_verified"`
+		Locale        string `json:"locale"`
+	}
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Read oauthState from Cookie
+		oauthState, _ := r.Cookie("oauthstate")
+
+		if r.FormValue("state") != oauthState.Value {
+			s.error(w, r, http.StatusBadRequest, errors.New("invalid oauth google state"))
+			return
+		}
+
+		data, err := getUserDataFromGoogle(r.FormValue("code"))
+		if err != nil {
+			log.Println(err.Error())
+			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+			return
+		}
+
+		googleInfo := &GoogleInfo{}
+		err = json.Unmarshal(data, googleInfo)
+		if err != nil {
+			s.error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		u, err := s.store.User().FindByEmail(googleInfo.Email)
+		if err == store.ErrRecordNotFound {
+			if !googleInfo.EmailVerified {
+				s.error(w, r, http.StatusBadRequest, errors.New("can't create new user: "+
+					"google email address is not verified"))
+				return
+			}
+
+			if err := s.store.User().CreateWithGoogle(u); err != nil {
+				s.error(w, r, http.StatusInternalServerError, err)
+				return
+			}
+
+			tokenString, err := jwt.GenerateJWT(u)
+			if err != nil {
+				s.error(w, r, http.StatusInternalServerError, err)
+				return
+			}
+
+			s.respond(w, r, http.StatusCreated, tokenString)
+
+		} else if err != nil {
+			s.error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		tokenString, err := jwt.GenerateJWT(u)
+		if err != nil {
+			s.error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		s.respond(w, r, http.StatusOK, tokenString)
+		return
 
 	}
 }

@@ -23,7 +23,7 @@ func StartMainHTTP(config *Config) error {
 	store := sqlstore.New(db)
 
 	log.Println("Starting main HTTP server...")
-	s := newServer(store, config.JwtKey)
+	s := newServer(store, config)
 	return http.ListenAndServe(config.BindAddr, s)
 
 }
@@ -38,7 +38,7 @@ func StartTLS(config *Config) error {
 	store := sqlstore.New(db)
 
 	log.Println("Starting TLS server...")
-	s := newServer(store, config.JwtKey)
+	s := newServer(store, config)
 	return http.ListenAndServeTLS(config.TLSAddr, config.Cert, config.Key, s)
 }
 

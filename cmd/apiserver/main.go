@@ -7,29 +7,12 @@ import (
 )
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		log.Fatal("$PORT must be set")
-	}
-	log.Println("port variable:", port)
 
-	databaseURL := os.Getenv("DATABASE_URL")
-	if databaseURL == "" {
-		log.Fatal("&DATABASE_URL must be set")
+	config, err := apiserver.NewConfig()
+	if err != nil {
+		log.Println("error creating config file:", err)
+		os.Exit(1)
 	}
-	log.Println("databaseURL variable:", databaseURL)
-
-	jwtKey := []byte(os.Getenv("JWT_KEY"))
-	if jwtKey == nil {
-		log.Fatal("&JWT_KEY must be set")
-	}
-
-	config := &apiserver.Config{
-		BindAddr:    ":" + port,
-		DatabaseURL: databaseURL,
-		JwtKey:      jwtKey,
-	}
-
 	//deprecated: HTTPS не поддерживается на бесплатном heroku
 	//config := apiserver.NewConfig()
 	//_, err := toml.DecodeFile(configPath, config)
@@ -59,6 +42,6 @@ func main() {
 	//запуск главного HTTP сервера
 	if err := apiserver.StartMainHTTP(config); err != nil {
 		log.Println("error starting http server: ", err)
-		os.Exit(1)
+		os.Exit(2)
 	}
 }

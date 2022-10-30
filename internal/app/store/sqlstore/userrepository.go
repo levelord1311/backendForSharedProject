@@ -43,6 +43,32 @@ func (r *UserRepository) Create(u *model.User) error {
 
 }
 
+func (r *UserRepository) CreateWithGoogle(u *model.User) error {
+
+	queryString := `
+	INSERT INTO users (email, given_name, family_name)
+	VALUES (?, ?, ?);`
+
+	stmt, err := r.store.db.Prepare(queryString)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.Exec(u.Email, u.GivenName, u.FamilyName)
+	if err != nil {
+		return err
+	}
+	retID, err := res.LastInsertId()
+	if err != nil {
+		return err
+	}
+
+	u.ID = int(retID)
+	return nil
+
+}
+
 func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
 	queryString := `
 	SELECT id, email, encrypted_password

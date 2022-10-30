@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19f7c286-4b58-41df-abef-1f7ca6ee8d15" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/internal/app/jwt/jwt.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/app/apiserver/googleJWT.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/apiserver/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/apiserver/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
@@ -14,6 +14,8 @@
       <change beforePath="$PROJECT_DIR$/internal/app/apiserver/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/app/apiserver/config.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/app/apiserver/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/app/apiserver/server.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/app/model/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/app/model/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/store/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/app/store/repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/store/sqlstore/userrepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/app/store/sqlstore/userrepository.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +57,7 @@
     "configurable.GoLibrariesConfigurable.is.expanded": "true",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "C:/Users/rmv13/GolandProjects/simpleWebServer",
+    "last_opened_file_path": "C:/Users/rmv13/GolandProjects/googleAuth",
     "settings.editor.selected.configurable": "goland.project.structure"
   },
   "keyToStringList": {
