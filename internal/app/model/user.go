@@ -8,6 +8,7 @@ import (
 
 type User struct {
 	ID                int    `json:"id"`
+	Username          string `json:"username"`
 	Email             string `json:"email"`
 	Password          string `json:"password,omitempty"`
 	EncryptedPassword string `json:"-"`
@@ -17,6 +18,7 @@ type User struct {
 
 func (u *User) Validate() error {
 	return validation.ValidateStruct(u,
+		validation.Field(&u.Username, validation.Required),
 		validation.Field(&u.Email, validation.Required, is.Email),
 		validation.Field(&u.Password, validation.By(
 			RequiredIf(u.EncryptedPassword == "")),

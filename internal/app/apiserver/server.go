@@ -7,6 +7,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	validation "github.com/go-ozzo/ozzo-validation"
+	"github.com/go-ozzo/ozzo-validation/is"
 	"github.com/gorilla/mux"
 	"log"
 	"net"
@@ -20,7 +22,7 @@ type server struct {
 }
 
 var (
-	errIncorrectEmailOrPassword = errors.New("incorrect email or password")
+	errIncorrectUsernameEmailOrPassword = errors.New("incorrect username/email or password")
 )
 
 func newServer(store store.Store, config *Config) *server {
@@ -73,6 +75,7 @@ func (s *server) handleDefaultPage() http.HandlerFunc {
 
 func (s *server) handleUsersCreate() http.HandlerFunc {
 	type request struct {
+		Username string `json:"username"`
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
@@ -84,6 +87,7 @@ func (s *server) handleUsersCreate() http.HandlerFunc {
 		}
 
 		u := &model.User{
+			Username: req.Username,
 			Email:    req.Email,
 			Password: req.Password,
 		}
@@ -99,7 +103,7 @@ func (s *server) handleUsersCreate() http.HandlerFunc {
 
 func (s *server) handleJWTCreate() http.HandlerFunc {
 	type request struct {
-		Email    string `json:"email"`
+		Login    string `json:"login"`
 		Password string `json:"password"`
 	}
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -109,12 +113,20 @@ func (s *server) handleJWTCreate() http.HandlerFunc {
 			return
 		}
 
-		u, err := s.store.User().FindByEmail(req.Email)
-		if err != nil || !u.ComparePassword(req.Password) {
-			s.error(w, r, http.StatusUnauthorized, errIncorrectEmailOrPassword)
-			return
+		u := &model.User{}
+		if validation.Validate(req.Login, is.Email) == nil {
+			u, err := s.store.User().FindByEmail(req.Login)
+			if err != nil || !u.ComparePassword(req.Password) {
+				s.error(w, r, http.StatusUnauthorized, errIncorrectUsernameEmailOrPassword)
+				return
+			}
+		} else {
+			u, err := s.store.User().FindByUsername(req.Login)
+			if err != nil || !u.ComparePassword(req.Password) {
+				s.error(w, r, http.StatusUnauthorized, errIncorrectUsernameEmailOrPassword)
+				return
+			}
 		}
-
 		tokenString, err := jwt.GenerateJWT(u)
 		if err != nil {
 			s.error(w, r, http.StatusInternalServerError, err)

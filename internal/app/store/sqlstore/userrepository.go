@@ -20,8 +20,8 @@ func (r *UserRepository) Create(u *model.User) error {
 	}
 
 	queryString := `
-	INSERT INTO users (email, encrypted_password)
-	VALUES (?, ?);`
+	INSERT INTO users (username, email, encrypted_password)
+	VALUES (?, ?, ?);`
 
 	stmt, err := r.store.db.Prepare(queryString)
 	if err != nil {
@@ -29,7 +29,7 @@ func (r *UserRepository) Create(u *model.User) error {
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(u.Email, u.EncryptedPassword)
+	res, err := stmt.Exec(u.Username, u.Email, u.EncryptedPassword)
 	if err != nil {
 		return err
 	}
@@ -77,6 +77,27 @@ func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
 	u := &model.User{}
 	if err := r.store.db.QueryRow(queryString, email).Scan(
 		&u.ID,
+		&u.Email,
+		&u.EncryptedPassword,
+	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, store.ErrRecordNotFound
+		}
+
+		return nil, err
+	}
+	return u, nil
+}
+
+func (r *UserRepository) FindByUsername(username string) (*model.User, error) {
+	queryString := `
+	SELECT id, username, email, encrypted_password
+	FROM users
+	WHERE username = ?;`
+	u := &model.User{}
+	if err := r.store.db.QueryRow(queryString, username).Scan(
+		&u.ID,
+		&u.Username,
 		&u.Email,
 		&u.EncryptedPassword,
 	); err != nil {
