@@ -23,7 +23,7 @@ type EstateLot struct {
 
 var estateTypes = []string{"квартира", "дом"}
 
-func (l EstateLot) ValidateLotFields() error {
+func (l *EstateLot) ValidateLotFields() error {
 	return validation.ValidateStruct(
 		l,
 		validation.Field(l.TypeOfEstate, validation.Required, validation.In(estateTypes)),
