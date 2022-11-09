@@ -12,7 +12,7 @@ type UserRepository struct {
 }
 
 func (r *UserRepository) CreateUser(u *model.User) error {
-	if err := u.Validate(); err != nil {
+	if err := u.ValidateUserFields(); err != nil {
 		return err
 	}
 
@@ -112,6 +112,10 @@ func (r *UserRepository) FindByUsername(username string) (*model.User, error) {
 }
 
 func (r *UserRepository) CreateEstateLot(lot *model.EstateLot) error {
+	if err := lot.ValidateLotFields(); err != nil {
+		return err
+	}
+
 	queryString := `
 	INSERT INTO estate_lots (
 	                  type_of_estate,

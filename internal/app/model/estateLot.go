@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	validation "github.com/go-ozzo/ozzo-validation"
+	"time"
+)
 
 type EstateLot struct {
 	ID           uint   `json:"id"`
@@ -16,4 +19,8 @@ type EstateLot struct {
 	Price        int    `json:"price"`
 	CreatedAt    time.Time
 	RedactedAt   time.Time
+}
+
+func (l EstateLot) ValidateLotFields() error {
+	return validation.Validate(l, validation.Required)
 }

@@ -19,7 +19,7 @@ type User struct {
 	RedactedAt        time.Time `json:"redacted_at"`
 }
 
-func (u *User) Validate() error {
+func (u *User) ValidateUserFields() error {
 	return validation.ValidateStruct(u,
 		validation.Field(&u.Username, validation.Required),
 		validation.Field(&u.Email, validation.Required, is.Email),
