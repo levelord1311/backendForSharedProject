@@ -66,7 +66,7 @@ func (s *server) configureRouter() {
 	s.router.HandleFunc("/auth/google", s.handleRedirectToGoogleLogin())
 	s.router.HandleFunc("/auth/google/callback", s.handleGoogleCallback())
 	s.router.HandleFunc("/estate_lots/create", s.handleEstateLotsCreate()).Methods("POST")
-	s.router.HandleFunc("estate_lots/get_all")
+	s.router.HandleFunc("estate_lots/get_all", s.handleGetAllLots())
 }
 
 func (s *server) handleDefaultPage() http.HandlerFunc {
