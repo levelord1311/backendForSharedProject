@@ -26,15 +26,15 @@ var estateTypes = []string{"квартира", "дом"}
 func (l *EstateLot) ValidateLotFields() error {
 	return validation.ValidateStruct(
 		l,
-		validation.Field(l.TypeOfEstate, validation.Required, validation.In(estateTypes)),
-		validation.Field(l.Rooms, validation.Required, validation.Max(6)),
-		validation.Field(l.Area, validation.Required),
-		validation.Field(l.Floor, validation.Required, validation.Max(163)),
-		validation.Field(l.MaxFloor, validation.Required, validation.Max(163)),
-		validation.Field(l.City, validation.Required),
-		validation.Field(l.District, validation.Required),
-		validation.Field(l.Street, validation.Required),
-		validation.Field(l.Building, validation.Required),
-		validation.Field(l.Price, validation.Required),
+		validation.Field(&l.TypeOfEstate, validation.Required, validation.In(estateTypes)),
+		validation.Field(&l.Rooms, validation.Required, validation.Max(6)),
+		validation.Field(&l.Area, validation.Required),
+		validation.Field(&l.Floor, validation.Required, validation.Max(163)),
+		validation.Field(&l.MaxFloor, validation.Required, validation.Max(163)),
+		validation.Field(&l.City, validation.Required),
+		validation.Field(&l.District, validation.Required),
+		validation.Field(&l.Street, validation.Required),
+		validation.Field(&l.Building, validation.Required),
+		validation.Field(&l.Price, validation.Required),
 	)
 }
