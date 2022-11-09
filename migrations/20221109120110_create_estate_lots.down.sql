@@ -1,0 +1,1 @@
+DROP TABLE `u1803158_default`.`estate_lots`;

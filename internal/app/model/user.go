@@ -4,16 +4,19 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
 	"golang.org/x/crypto/bcrypt"
+	"time"
 )
 
 type User struct {
-	ID                int    `json:"id"`
-	Username          string `json:"username"`
-	Email             string `json:"email"`
-	Password          string `json:"password,omitempty"`
-	EncryptedPassword string `json:"-"`
-	GivenName         string `json:"given_name"`
-	FamilyName        string `json:"family_name"`
+	ID                uint      `json:"id"`
+	Username          string    `json:"username"`
+	Email             string    `json:"email"`
+	Password          string    `json:"password,omitempty"`
+	EncryptedPassword string    `json:"-"`
+	GivenName         string    `json:"given_name"`
+	FamilyName        string    `json:"family_name"`
+	CreatedAt         time.Time `json:"created_at"`
+	RedactedAt        time.Time `json:"redacted_at"`
 }
 
 func (u *User) Validate() error {

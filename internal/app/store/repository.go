@@ -3,8 +3,10 @@ package store
 import "backendForSharedProject/internal/app/model"
 
 type UserRepository interface {
-	Create(user *model.User) error
-	CreateWithGoogle(user *model.User) error
+	CreateUser(user *model.User) error
+	CreateUserWithGoogle(user *model.User) error
 	FindByEmail(string) (*model.User, error)
 	FindByUsername(string) (*model.User, error)
+	CreateEstateLot(lot *model.EstateLot) error
+	GetAllEstateLots() (*[]model.EstateLot, error)
 }

@@ -4,13 +4,14 @@ import (
 	"backendForSharedProject/internal/app/model"
 	"backendForSharedProject/internal/app/store"
 	"database/sql"
+	"time"
 )
 
 type UserRepository struct {
 	store *Store
 }
 
-func (r *UserRepository) Create(u *model.User) error {
+func (r *UserRepository) CreateUser(u *model.User) error {
 	if err := u.Validate(); err != nil {
 		return err
 	}
@@ -20,8 +21,8 @@ func (r *UserRepository) Create(u *model.User) error {
 	}
 
 	queryString := `
-	INSERT INTO users (username, email, encrypted_password)
-	VALUES (?, ?, ?);`
+	INSERT INTO users (username, email, encrypted_password, created_at)
+	VALUES (?, ?, ?, ?);`
 
 	stmt, err := r.store.db.Prepare(queryString)
 	if err != nil {
@@ -29,7 +30,7 @@ func (r *UserRepository) Create(u *model.User) error {
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(u.Username, u.Email, u.EncryptedPassword)
+	res, err := stmt.Exec(u.Username, u.Email, u.EncryptedPassword, time.Now())
 	if err != nil {
 		return err
 	}
@@ -38,16 +39,16 @@ func (r *UserRepository) Create(u *model.User) error {
 		return err
 	}
 
-	u.ID = int(retID)
+	u.ID = uint(retID)
 	return nil
 
 }
 
-func (r *UserRepository) CreateWithGoogle(u *model.User) error {
+func (r *UserRepository) CreateUserWithGoogle(u *model.User) error {
 
 	queryString := `
-	INSERT INTO users (email, given_name, family_name)
-	VALUES (?, ?, ?);`
+	INSERT INTO users (email, given_name, family_name, created_at)
+	VALUES (?, ?, ?, ?);`
 
 	stmt, err := r.store.db.Prepare(queryString)
 	if err != nil {
@@ -55,7 +56,7 @@ func (r *UserRepository) CreateWithGoogle(u *model.User) error {
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(u.Email, u.GivenName, u.FamilyName)
+	res, err := stmt.Exec(u.Email, u.GivenName, u.FamilyName, time.Now())
 	if err != nil {
 		return err
 	}
@@ -64,7 +65,7 @@ func (r *UserRepository) CreateWithGoogle(u *model.User) error {
 		return err
 	}
 
-	u.ID = int(retID)
+	u.ID = uint(retID)
 	return nil
 
 }
@@ -108,4 +109,80 @@ func (r *UserRepository) FindByUsername(username string) (*model.User, error) {
 		return nil, err
 	}
 	return u, nil
+}
+
+func (r *UserRepository) CreateEstateLot(lot *model.EstateLot) error {
+	queryString := `
+	INSERT INTO estate_lots (
+	                  type_of_estate,
+	                  rooms,
+	                  area,
+	                  floor,
+	                  max_floor,
+	                  city,
+	                  district,
+	                  street,
+	                  building,
+	                  price,
+	                  created_at
+	)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+
+	stmt, err := r.store.db.Prepare(queryString)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.Exec(
+		lot.TypeOfEstate,
+		lot.Rooms,
+		lot.Area,
+		lot.Floor,
+		lot.MaxFloor,
+		lot.City,
+		lot.District,
+		lot.Street,
+		lot.Building,
+		lot.Price,
+		time.Now(),
+	)
+	if err != nil {
+		return err
+	}
+	retID, err := res.LastInsertId()
+	if err != nil {
+		return err
+	}
+
+	lot.ID = uint(retID)
+	return nil
+
+}
+
+func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
+
+	//нужно будет ограничить количество выводимых лотов и соответственно изменить размер создаваемого в памяти слайса.
+	lots := make([]model.EstateLot, 50)
+
+	rows, err := r.store.db.Query("SELECT * FROM estate_lots")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		i := 0
+		err := rows.Scan(&lots[i])
+		if err != nil {
+			return nil, err
+		}
+		i++
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+
+	return &lots, nil
 }

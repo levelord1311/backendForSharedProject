@@ -61,10 +61,12 @@ func redirectToTls(w http.ResponseWriter, r *http.Request) {
 
 func (s *server) configureRouter() {
 	s.router.HandleFunc("/", s.handleDefaultPage())
-	s.router.HandleFunc("/users", s.handleUsersCreate()).Methods("POST")
+	s.router.HandleFunc("/users/create", s.handleUsersCreate()).Methods("POST")
 	s.router.HandleFunc("/auth", s.handleJWTCreate()).Methods("POST")
 	s.router.HandleFunc("/auth/google", s.handleRedirectToGoogleLogin())
 	s.router.HandleFunc("/auth/google/callback", s.handleGoogleCallback())
+	s.router.HandleFunc("/estate_lots/create", s.handleEstateLotsCreate()).Methods("POST")
+	s.router.HandleFunc("estate_lots/get_all")
 }
 
 func (s *server) handleDefaultPage() http.HandlerFunc {
@@ -91,13 +93,65 @@ func (s *server) handleUsersCreate() http.HandlerFunc {
 			Email:    req.Email,
 			Password: req.Password,
 		}
-		if err := s.store.User().Create(u); err != nil {
+		if err := s.store.User().CreateUser(u); err != nil {
 			s.error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
 
 		u.Sanitize()
 		s.respond(w, r, http.StatusCreated, u)
+	}
+}
+
+func (s *server) handleEstateLotsCreate() http.HandlerFunc {
+	type request struct {
+		TypeOfEstate string `json:"type_of_estate"`
+		Rooms        int    `json:"rooms"`
+		Area         int    `json:"area"`
+		Floor        int    `json:"floor"`
+		MaxFloor     int    `json:"max_floor"`
+		City         string `json:"city"`
+		District     string `json:"district"`
+		Street       string `json:"street"`
+		Building     string `json:"building"`
+		Price        int    `json:"price"`
+	}
+	return func(w http.ResponseWriter, r *http.Request) {
+		req := request{}
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			s.error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		lot := &model.EstateLot{
+			TypeOfEstate: req.TypeOfEstate,
+			Rooms:        req.Rooms,
+			Area:         req.Area,
+			Floor:        req.Floor,
+			MaxFloor:     req.MaxFloor,
+			City:         req.City,
+			District:     req.District,
+			Street:       req.Street,
+			Building:     req.Building,
+			Price:        req.Price,
+		}
+		if err := s.store.User().CreateEstateLot(lot); err != nil {
+			s.error(w, r, http.StatusUnprocessableEntity, err)
+			return
+		}
+
+		s.respond(w, r, http.StatusCreated, lot)
+	}
+}
+
+func (s *server) handleGetAllLots() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		lots, err := s.store.User().GetAllEstateLots()
+		if err != nil {
+			s.error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+		s.respond(w, r, http.StatusCreated, &lots)
 	}
 }
 
@@ -195,7 +249,7 @@ func (s *server) handleGoogleCallback() http.HandlerFunc {
 				FamilyName: googleInfo.FamilyName,
 			}
 
-			if err := s.store.User().CreateWithGoogle(u); err != nil {
+			if err := s.store.User().CreateUserWithGoogle(u); err != nil {
 				s.error(w, r, http.StatusInternalServerError, err)
 				return
 			}
