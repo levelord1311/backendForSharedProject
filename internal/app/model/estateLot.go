@@ -21,12 +21,10 @@ type EstateLot struct {
 	RedactedAt   time.Time
 }
 
-var estateTypes = []string{"квартира", "дом"}
-
 func (l *EstateLot) ValidateLotFields() error {
 	return validation.ValidateStruct(
 		l,
-		validation.Field(&l.TypeOfEstate, validation.Required, validation.In(estateTypes)),
+		validation.Field(&l.TypeOfEstate, validation.Required, validation.In("квартира", "дом")),
 		validation.Field(&l.Rooms, validation.Required, validation.Max(6)),
 		validation.Field(&l.Area, validation.Required),
 		validation.Field(&l.Floor, validation.Required, validation.Max(163)),
