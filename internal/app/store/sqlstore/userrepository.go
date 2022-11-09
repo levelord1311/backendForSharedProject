@@ -130,7 +130,7 @@ func (r *UserRepository) CreateEstateLot(lot *model.EstateLot) error {
 	                  price,
 	                  created_at
 	)
-	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());`
 
 	stmt, err := r.store.db.Prepare(queryString)
 	if err != nil {
@@ -149,7 +149,6 @@ func (r *UserRepository) CreateEstateLot(lot *model.EstateLot) error {
 		lot.Street,
 		lot.Building,
 		lot.Price,
-		time.Now(),
 	)
 	if err != nil {
 		return err
