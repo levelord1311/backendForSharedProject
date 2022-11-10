@@ -212,17 +212,7 @@ func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 	lots := make([]model.EstateLot, 20)
 
 	queryString := `
-	SELECT  id,
-    		type_of_estate,
-	        rooms,
-		    area,
-	    	floor,
-	        max_floor,
-	        district,
-	        street,
-	        building,
-	        price,
-	       	redacted_at
+	SELECT *
 	FROM estate_lots
 	ORDER BY redacted_at DESC;`
 
@@ -232,9 +222,9 @@ func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 	}
 	defer rows.Close()
 
-	for rows.Next() {
-		i := 0
-		var redactedTS *model.RawTime
+	for i := 0; rows.Next(); i++ {
+
+		var createdTS, redactedTS *model.RawTime
 		err := rows.Scan(
 			&lots[i].ID,
 			&lots[i].TypeOfEstate,
@@ -242,13 +232,20 @@ func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 			&lots[i].Area,
 			&lots[i].Floor,
 			&lots[i].MaxFloor,
+			&lots[i].City,
 			&lots[i].District,
 			&lots[i].Street,
 			&lots[i].Building,
 			&lots[i].Price,
+			&createdTS,
 			&redactedTS,
 		)
 
+		if err != nil {
+			return nil, err
+		}
+
+		createdAt, err := createdTS.Time()
 		if err != nil {
 			return nil, err
 		}
@@ -258,8 +255,7 @@ func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 			return nil, err
 		}
 
-		lots[i].RedactedAt = redactedAt
-		i++
+		lots[i].CreatedAt, lots[i].RedactedAt = createdAt, redactedAt
 	}
 	err = rows.Err()
 	if err != nil {

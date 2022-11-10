@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="19f7c286-4b58-41df-abef-1f7ca6ee8d15" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/20221109105920_create_users.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20221109105920_create_users.up.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/store/sqlstore/userrepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/app/store/sqlstore/userrepository.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
