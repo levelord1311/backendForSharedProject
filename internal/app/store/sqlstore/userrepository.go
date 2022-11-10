@@ -39,6 +39,22 @@ func (r *UserRepository) CreateUser(u *model.User) error {
 		return err
 	}
 
+	var timestamp *model.RawTime
+
+	if err = r.store.db.QueryRow("SELECT created_at FROM users WHERE id = ?", retID).Scan(&timestamp);
+		err != nil {
+		if err == sql.ErrNoRows {
+			return store.ErrRecordNotFound
+		}
+		return err
+	}
+
+	createdAt, err := timestamp.Time()
+	if err != nil {
+		return err
+	}
+
+	u.CreatedAt = createdAt
 	u.ID = uint(retID)
 	return nil
 
@@ -48,7 +64,7 @@ func (r *UserRepository) CreateUserWithGoogle(u *model.User) error {
 
 	queryString := `
 	INSERT INTO users (email, given_name, family_name, created_at)
-	VALUES (?, ?, ?, ?);`
+	VALUES (?, ?, ?, NOW());`
 
 	stmt, err := r.store.db.Prepare(queryString)
 	if err != nil {
@@ -65,6 +81,22 @@ func (r *UserRepository) CreateUserWithGoogle(u *model.User) error {
 		return err
 	}
 
+	var timestamp *model.RawTime
+
+	if err = r.store.db.QueryRow("SELECT created_at FROM users WHERE id = ?", retID).Scan(&timestamp);
+		err != nil {
+		if err == sql.ErrNoRows {
+			return store.ErrRecordNotFound
+		}
+		return err
+	}
+
+	createdAt, err := timestamp.Time()
+	if err != nil {
+		return err
+	}
+
+	u.CreatedAt = createdAt
 	u.ID = uint(retID)
 	return nil
 
@@ -158,7 +190,9 @@ func (r *UserRepository) CreateEstateLot(lot *model.EstateLot) error {
 		return err
 	}
 
-	if err = r.store.db.QueryRow("SELECT created_at FROM estate_lots WHERE id = ?", retID).Scan(&lot.CreatedAt);
+	var timestamp *model.RawTime
+
+	if err = r.store.db.QueryRow("SELECT created_at FROM estate_lots WHERE id = ?", retID).Scan(&timestamp);
 		err != nil {
 		if err == sql.ErrNoRows {
 			return store.ErrRecordNotFound
@@ -166,8 +200,13 @@ func (r *UserRepository) CreateEstateLot(lot *model.EstateLot) error {
 		return err
 	}
 
-	lot.ID = uint(retID)
+	createdAt, err := timestamp.Time()
+	if err != nil {
+		return err
+	}
 
+	lot.CreatedAt = createdAt
+	lot.ID = uint(retID)
 	return nil
 
 }
