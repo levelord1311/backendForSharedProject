@@ -212,8 +212,7 @@ func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 	lots := make([]model.EstateLot, 20)
 
 	queryString := `
-	SELECT (
-		    id,
+	SELECT  id,
     		type_of_estate,
 	        rooms,
 		    area,
@@ -224,7 +223,7 @@ func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 	        building,
 	        price,
 	       	redacted_at
-	) FROM estate_lots
+	FROM estate_lots
 	ORDER BY redacted_at DESC;`
 
 	rows, err := r.store.db.Query(queryString)
