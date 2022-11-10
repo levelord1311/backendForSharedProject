@@ -168,12 +168,12 @@ func (s *server) handleJWTCreate() http.HandlerFunc {
 		}
 
 		//validate both login and password are present
-		if err := func() error {
+		if err := func(req *request) error {
 			return validation.ValidateStruct(req,
 				validation.Field(req.Login, validation.Required),
 				validation.Field(req.Password, validation.Required),
 			)
-		}(); err != nil {
+		}(req); err != nil {
 			s.error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
