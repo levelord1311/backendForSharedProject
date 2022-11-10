@@ -41,8 +41,7 @@ func (r *UserRepository) CreateUser(u *model.User) error {
 
 	var timestamp *model.RawTime
 
-	if err = r.store.db.QueryRow("SELECT created_at FROM users WHERE id = ?", retID).Scan(&timestamp);
-		err != nil {
+	if err = r.store.db.QueryRow("SELECT created_at FROM users WHERE id = ?", retID).Scan(&timestamp); err != nil {
 		if err == sql.ErrNoRows {
 			return store.ErrRecordNotFound
 		}
@@ -83,8 +82,7 @@ func (r *UserRepository) CreateUserWithGoogle(u *model.User) error {
 
 	var timestamp *model.RawTime
 
-	if err = r.store.db.QueryRow("SELECT created_at FROM users WHERE id = ?", retID).Scan(&timestamp);
-		err != nil {
+	if err = r.store.db.QueryRow("SELECT created_at FROM users WHERE id = ?", retID).Scan(&timestamp); err != nil {
 		if err == sql.ErrNoRows {
 			return store.ErrRecordNotFound
 		}
@@ -192,8 +190,7 @@ func (r *UserRepository) CreateEstateLot(lot *model.EstateLot) error {
 
 	var timestamp *model.RawTime
 
-	if err = r.store.db.QueryRow("SELECT created_at FROM estate_lots WHERE id = ?", retID).Scan(&timestamp);
-		err != nil {
+	if err = r.store.db.QueryRow("SELECT created_at FROM estate_lots WHERE id = ?", retID).Scan(&timestamp); err != nil {
 		if err == sql.ErrNoRows {
 			return store.ErrRecordNotFound
 		}
@@ -214,9 +211,26 @@ func (r *UserRepository) CreateEstateLot(lot *model.EstateLot) error {
 func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 
 	//нужно будет ограничить количество выводимых лотов и соответственно изменить размер создаваемого в памяти слайса.
-	lots := make([]model.EstateLot, 50)
+	lots := make([]model.EstateLot, 20)
 
-	rows, err := r.store.db.Query("SELECT * FROM estate_lots")
+	queryString := `
+	SELECT (
+		    id,
+    		type_of_estate,
+	        rooms,
+		    area,
+	    	floor,
+	        max_floor,
+	        district,
+	        street,
+	        building,
+	        price,
+	        created_at,
+	       	redacted_at,
+	) FROM estate_lots
+	ORDER BY redacted_at DESC;`
+
+	rows, err := r.store.db.Query(queryString)
 	if err != nil {
 		return nil, err
 	}
@@ -224,10 +238,38 @@ func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 
 	for rows.Next() {
 		i := 0
-		err := rows.Scan(&lots[i])
+		var createdTS, redactedTS *model.RawTime
+		err := rows.Scan(
+			&lots[i].ID,
+			&lots[i].TypeOfEstate,
+			&lots[i].Rooms,
+			&lots[i].Area,
+			&lots[i].Floor,
+			&lots[i].MaxFloor,
+			&lots[i].District,
+			&lots[i].Street,
+			&lots[i].Building,
+			&lots[i].Price,
+			&createdTS,
+			&redactedTS,
+		)
+
 		if err != nil {
 			return nil, err
 		}
+
+		createdAt, err := createdTS.Time()
+		if err != nil {
+			return nil, err
+		}
+
+		redactedAt, err := redactedTS.Time()
+		if err != nil {
+			return nil, err
+		}
+
+		lots[i].CreatedAt, lots[i].RedactedAt = createdAt, redactedAt
+
 		i++
 	}
 	err = rows.Err()
