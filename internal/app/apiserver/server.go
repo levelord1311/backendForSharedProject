@@ -167,6 +167,17 @@ func (s *server) handleJWTCreate() http.HandlerFunc {
 			return
 		}
 
+		//validate both login and password are present
+		if err := func() error {
+			return validation.ValidateStruct(req,
+				validation.Field(req.Login, validation.Required),
+				validation.Field(req.Password, validation.Required),
+			)
+		}(); err != nil {
+			s.error(w, r, http.StatusUnprocessableEntity, err)
+			return
+		}
+
 		u := &model.User{}
 		if validation.Validate(req.Login, is.Email) == nil {
 			u, err := s.store.User().FindByEmail(req.Login)
@@ -235,7 +246,7 @@ func (s *server) handleGoogleCallback() http.HandlerFunc {
 			return
 		}
 
-		u, err := s.store.User().FindByEmail(googleInfo.Email)
+		u, err := s.store.User().FindByEmailGoogle(googleInfo.Email)
 		if err == store.ErrRecordNotFound {
 			if !googleInfo.EmailVerified {
 				s.error(w, r, http.StatusBadRequest, errors.New("can't create new user: "+

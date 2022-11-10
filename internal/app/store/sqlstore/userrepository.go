@@ -11,7 +11,7 @@ type UserRepository struct {
 }
 
 func (r *UserRepository) CreateUser(u *model.User) error {
-	if err := u.ValidateUserFields(); err != nil {
+	if err := u.ValidateFields(); err != nil {
 		return err
 	}
 
@@ -109,6 +109,25 @@ func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
 		&u.ID,
 		&u.Email,
 		&u.EncryptedPassword,
+	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, store.ErrRecordNotFound
+		}
+
+		return nil, err
+	}
+	return u, nil
+}
+
+func (r *UserRepository) FindByEmailGoogle(email string) (*model.User, error) {
+	queryString := `
+	SELECT id, email
+	FROM users
+	WHERE email = ?;`
+	u := &model.User{}
+	if err := r.store.db.QueryRow(queryString, email).Scan(
+		&u.ID,
+		&u.Email,
 	); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, store.ErrRecordNotFound
