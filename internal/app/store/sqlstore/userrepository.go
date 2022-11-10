@@ -4,7 +4,6 @@ import (
 	"backendForSharedProject/internal/app/model"
 	"backendForSharedProject/internal/app/store"
 	"database/sql"
-	"time"
 )
 
 type UserRepository struct {
@@ -21,8 +20,8 @@ func (r *UserRepository) CreateUser(u *model.User) error {
 	}
 
 	queryString := `
-	INSERT INTO users (username, email, encrypted_password, created_at)
-	VALUES (?, ?, ?, ?);`
+	INSERT INTO users (username, email, encrypted_password)
+	VALUES (?, ?, ?);`
 
 	stmt, err := r.store.db.Prepare(queryString)
 	if err != nil {
@@ -30,7 +29,7 @@ func (r *UserRepository) CreateUser(u *model.User) error {
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(u.Username, u.Email, u.EncryptedPassword, time.Now())
+	res, err := stmt.Exec(u.Username, u.Email, u.EncryptedPassword)
 	if err != nil {
 		return err
 	}
@@ -62,8 +61,8 @@ func (r *UserRepository) CreateUser(u *model.User) error {
 func (r *UserRepository) CreateUserWithGoogle(u *model.User) error {
 
 	queryString := `
-	INSERT INTO users (email, given_name, family_name, created_at)
-	VALUES (?, ?, ?, NOW());`
+	INSERT INTO users (email, given_name, family_name)
+	VALUES (?, ?, ?);`
 
 	stmt, err := r.store.db.Prepare(queryString)
 	if err != nil {
@@ -71,7 +70,7 @@ func (r *UserRepository) CreateUserWithGoogle(u *model.User) error {
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(u.Email, u.GivenName, u.FamilyName, time.Now())
+	res, err := stmt.Exec(u.Email, u.GivenName, u.FamilyName)
 	if err != nil {
 		return err
 	}
@@ -157,10 +156,9 @@ func (r *UserRepository) CreateEstateLot(lot *model.EstateLot) error {
 	                  district,
 	                  street,
 	                  building,
-	                  price,
-	                  created_at
+	                  price
 	)
-	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());`
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 
 	stmt, err := r.store.db.Prepare(queryString)
 	if err != nil {
@@ -225,8 +223,7 @@ func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 	        street,
 	        building,
 	        price,
-	        created_at,
-	       	redacted_at,
+	       	redacted_at
 	) FROM estate_lots
 	ORDER BY redacted_at DESC;`
 
@@ -238,7 +235,7 @@ func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 
 	for rows.Next() {
 		i := 0
-		var createdTS, redactedTS *model.RawTime
+		var redactedTS *model.RawTime
 		err := rows.Scan(
 			&lots[i].ID,
 			&lots[i].TypeOfEstate,
@@ -250,15 +247,9 @@ func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 			&lots[i].Street,
 			&lots[i].Building,
 			&lots[i].Price,
-			&createdTS,
 			&redactedTS,
 		)
 
-		if err != nil {
-			return nil, err
-		}
-
-		createdAt, err := createdTS.Time()
 		if err != nil {
 			return nil, err
 		}
@@ -268,8 +259,7 @@ func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 			return nil, err
 		}
 
-		lots[i].CreatedAt, lots[i].RedactedAt = createdAt, redactedAt
-
+		lots[i].RedactedAt = redactedAt
 		i++
 	}
 	err = rows.Err()
