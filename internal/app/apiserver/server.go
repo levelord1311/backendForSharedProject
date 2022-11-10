@@ -146,7 +146,7 @@ func (s *server) handleEstateLotsCreate() http.HandlerFunc {
 
 func (s *server) handleGetAllLots() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		lots, err := s.store.User().GetAllEstateLots()
+		lots, err := s.store.User().GetFreshEstateLots()
 		if err != nil {
 			s.error(w, r, http.StatusInternalServerError, err)
 			return

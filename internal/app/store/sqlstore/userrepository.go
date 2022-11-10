@@ -206,15 +206,16 @@ func (r *UserRepository) CreateEstateLot(lot *model.EstateLot) error {
 
 }
 
-func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
+func (r *UserRepository) GetFreshEstateLots() (*[]model.EstateLot, error) {
 
-	//нужно будет ограничить количество выводимых лотов и соответственно изменить размер создаваемого в памяти слайса.
-	lots := make([]model.EstateLot, 8)
+	sliceSize := 100
+	lots := make([]model.EstateLot, sliceSize)
 
 	queryString := `
 	SELECT *
 	FROM estate_lots
-	ORDER BY redacted_at DESC;`
+	ORDER BY redacted_at DESC
+	LIMIT 100;`
 
 	rows, err := r.store.db.Query(queryString)
 	if err != nil {
@@ -223,7 +224,9 @@ func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 	defer rows.Close()
 
 	for i := 0; rows.Next(); i++ {
-
+		if i >= sliceSize-1 {
+			lots = append(lots, make([]model.EstateLot, i*2)...)
+		}
 		var createdTS, redactedTS *model.RawTime
 		err := rows.Scan(
 			&lots[i].ID,
@@ -260,6 +263,16 @@ func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 	err = rows.Err()
 	if err != nil {
 		return nil, err
+	}
+
+	//truncate empty lots
+	for k, lot := range lots {
+		if (lot == model.EstateLot{}) {
+			func() {
+				lots = lots[:k]
+			}()
+			break
+		}
 	}
 
 	return &lots, nil

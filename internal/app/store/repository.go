@@ -8,5 +8,5 @@ type UserRepository interface {
 	FindByEmail(string) (*model.User, error)
 	FindByUsername(string) (*model.User, error)
 	CreateEstateLot(lot *model.EstateLot) error
-	GetAllEstateLots() (*[]model.EstateLot, error)
+	GetFreshEstateLots() (*[]model.EstateLot, error)
 }
