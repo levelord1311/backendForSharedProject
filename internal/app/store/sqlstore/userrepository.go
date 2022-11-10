@@ -209,7 +209,7 @@ func (r *UserRepository) CreateEstateLot(lot *model.EstateLot) error {
 func (r *UserRepository) GetAllEstateLots() (*[]model.EstateLot, error) {
 
 	//нужно будет ограничить количество выводимых лотов и соответственно изменить размер создаваемого в памяти слайса.
-	lots := make([]model.EstateLot, 20)
+	lots := make([]model.EstateLot, 8)
 
 	queryString := `
 	SELECT *
