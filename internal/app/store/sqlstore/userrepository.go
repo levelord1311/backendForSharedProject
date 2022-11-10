@@ -158,7 +158,16 @@ func (r *UserRepository) CreateEstateLot(lot *model.EstateLot) error {
 		return err
 	}
 
+	if err = r.store.db.QueryRow("SELECT created_at FROM estate_lots WHERE id = ?", retID).Scan(&lot.CreatedAt);
+		err != nil {
+		if err == sql.ErrNoRows {
+			return store.ErrRecordNotFound
+		}
+		return err
+	}
+
 	lot.ID = uint(retID)
+
 	return nil
 
 }
