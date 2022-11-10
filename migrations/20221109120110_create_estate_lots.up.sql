@@ -10,7 +10,7 @@ CREATE TABLE `u1803158_default`.`estate_lots` (
     `street` VARCHAR(255) NOT NULL ,
     `building` VARCHAR(50) NOT NULL ,
     `price` INT NOT NULL,
-    `created_at` TIMESTAMP NOT NULL,
-    `redacted_at` TIMESTAMP,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `redacted_at` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
     ) ENGINE = InnoDB;

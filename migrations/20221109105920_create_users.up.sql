@@ -5,7 +5,7 @@ CREATE TABLE `u1803158_default`.`users` (
     `encrypted_password` VARCHAR(255) ,
     `given_name` VARCHAR(255) ,
     `family_name` VARCHAR(50) ,
-    `created_at` TIMESTAMP NOT NULL,
-    `redacted_at` TIMESTAMP,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `redacted_at` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
     ) ENGINE = InnoDB;

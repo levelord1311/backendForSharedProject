@@ -53,7 +53,7 @@ func (r *UserRepository) CreateUser(u *model.User) error {
 		return err
 	}
 
-	u.CreatedAt = createdAt
+	u.CreatedAt, u.RedactedAt = createdAt, createdAt
 	u.ID = uint(retID)
 	return nil
 
@@ -94,7 +94,7 @@ func (r *UserRepository) CreateUserWithGoogle(u *model.User) error {
 		return err
 	}
 
-	u.CreatedAt = createdAt
+	u.CreatedAt, u.RedactedAt = createdAt, createdAt
 	u.ID = uint(retID)
 	return nil
 
@@ -202,7 +202,7 @@ func (r *UserRepository) CreateEstateLot(lot *model.EstateLot) error {
 		return err
 	}
 
-	lot.CreatedAt = createdAt
+	lot.CreatedAt, lot.RedactedAt = createdAt, createdAt
 	lot.ID = uint(retID)
 	return nil
 
