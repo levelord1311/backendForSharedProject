@@ -1,1 +1,1 @@
-DROP TABLE `u1803158_default`.`users`;
+DROP TABLE `users`;

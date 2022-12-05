@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+
 	// TODO "Пионерский код. Логер без закрытия в defer c потерей данных логирования" - проверить, исправить
 	logger := logging.GetLogger()
 	logger.Println("logger initialized")
@@ -24,3 +25,4 @@ func main() {
 // TODO Makefile
 // TODO swagger
 // TODO отрефакторить из монолита в микросервисы
+// TODO JWT refresh токены, хотя бы в кеше (попробовать в redis?)

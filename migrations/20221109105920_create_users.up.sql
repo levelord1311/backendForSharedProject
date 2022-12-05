@@ -1,4 +1,4 @@
-CREATE TABLE `u1803158_default`.`users` (
+CREATE TABLE `users` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE ,
     `username` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL UNIQUE,
     `email` VARCHAR(50) NOT NULL UNIQUE ,

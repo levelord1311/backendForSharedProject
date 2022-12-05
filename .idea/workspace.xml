@@ -5,8 +5,54 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19f7c286-4b58-41df-abef-1f7ca6ee8d15" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/cmd/apiserver/main.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/app/apiserver/apiserver.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/app/apiserver/config.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/app/apiserver/googledata.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/app/apiserver/server_internal_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/app/model/testing.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/app/model_test/user_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/app/store/sqlstore/estateLotRepository.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/app/store/sqlstore_test/store_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/app/store/sqlstore_test/userRepository_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/app/store/teststore/estatelotrepository.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/app/store/teststore/estatelotrepository_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/app/store/teststore/store.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/app/store/teststore/userrepository.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/app/store/teststore/userrepository_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/internal/config/config.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/pkg/logging/logging.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/apiserver/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/app/apiserver/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/certificates/cert.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/certificates/certificates.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/certificates/key.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/apiserver/main.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/app/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/app/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/apiserver/apiserver.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/apiserver/config.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/apiserver/googleJWT.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/apiserver/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/apiserver/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/jwt/jwt.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/pkg/jwt/jwt.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/model/estateLot.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/model/estateLot.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/model/rawTime.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/model/rawtime.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/model/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/model/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/model/validations.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/model/validations.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/store/errors.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/store/errors.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/store/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/store/repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/store/sqlstore/store.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/store/sqlstore/store.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/store/sqlstore/userrepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/store/sqlstore/userrepository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/store/store.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/store/store.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/20221109105920_create_users.down.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20221109105920_create_users.down.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/20221109105920_create_users.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20221109105920_create_users.up.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/20221109120110_create_estate_lots.down.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20221109120110_create_estate_lots.down.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/20221109120110_create_estate_lots.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20221109120110_create_estate_lots.up.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,14 +71,14 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/cmd/apiserver/main.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/internal/app/apiserver/apiserver.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/internal/app/apiserver/googleJWT.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/internal/app/apiserver/server.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/internal/app/jwt/jwt.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/internal/app/model/user.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/internal/app/store/repository.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/internal/app/store/sqlstore/userrepository.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/app/cmd/apiserver/main.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/app/internal/app/apiserver/apiserver.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/app/internal/app/apiserver/googledata.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/app/internal/app/apiserver/server.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/app/internal/app/model/user.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/app/internal/app/store/repository.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/app/internal/app/store/sqlstore/userrepository.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/app/pkg/jwt/jwt.go" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -58,7 +104,7 @@
     "configurable.GoLibrariesConfigurable.is.expanded": "true",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "C:/Users/rmv13/GolandProjects/backendForSharedProject",
+    "last_opened_file_path": "C:/Users/rmv13/GolandProjects/httpserver",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "goland.project.structure"
   },
@@ -69,9 +115,87 @@
   }
 }]]></component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\dev\Documents\GitHub\HTTP-REST-API" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\pkg" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject" />
+      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\app" />
+      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\pkg" />
+      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\internal\app\store\sqlstore" />
+      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\internal\app\model_test" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Go Test.TestServer_HandleEstateLotsCreate in backendForSharedProject/internal/app/apiserver">
+    <configuration name="TestEstateLotRepository_CreateEstateLot in backendForSharedProject/internal/app/store/teststore" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="backendForSharedProject" />
+      <working_directory value="$PROJECT_DIR$/internal/app/store/teststore" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="backendForSharedProject/internal/app/store/teststore" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestEstateLotRepository_CreateEstateLot\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestServer_HandleEstateLotsCreate in backendForSharedProject/internal/app/apiserver" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="backendForSharedProject" />
+      <working_directory value="$PROJECT_DIR$/internal/app/apiserver" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="backendForSharedProject/internal/app/apiserver" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestServer_HandleEstateLotsCreate\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestServer_HandleEstateLotsCreate/empty_body in backendForSharedProject/internal/app/apiserver" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="backendForSharedProject" />
+      <working_directory value="$PROJECT_DIR$/internal/app/apiserver" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="backendForSharedProject/internal/app/apiserver" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestServer_HandleEstateLotsCreate\E$/^\Qempty_body\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestServer_HandleJWTCreate in backendForSharedProject/internal/app/apiserver" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="backendForSharedProject" />
+      <working_directory value="$PROJECT_DIR$/internal/app/apiserver" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="backendForSharedProject/internal/app/apiserver" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestServer_HandleJWTCreate\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestUserRepository_FindByUsername in backendForSharedProject/internal/app/store/teststore" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="backendForSharedProject" />
+      <working_directory value="$PROJECT_DIR$/internal/app/store/teststore" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="backendForSharedProject/internal/app/store/teststore" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestUserRepository_FindByUsername\E$" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Test.TestServer_HandleEstateLotsCreate in backendForSharedProject/internal/app/apiserver" />
+        <item itemvalue="Go Test.TestServer_HandleEstateLotsCreate/empty_body in backendForSharedProject/internal/app/apiserver" />
+        <item itemvalue="Go Test.TestServer_HandleJWTCreate in backendForSharedProject/internal/app/apiserver" />
+        <item itemvalue="Go Test.TestEstateLotRepository_CreateEstateLot in backendForSharedProject/internal/app/store/teststore" />
+        <item itemvalue="Go Test.TestUserRepository_FindByUsername in backendForSharedProject/internal/app/store/teststore" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">

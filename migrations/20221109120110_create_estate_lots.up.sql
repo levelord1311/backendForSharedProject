@@ -1,4 +1,4 @@
-CREATE TABLE `u1803158_default`.`estate_lots` (
+CREATE TABLE `estate_lots` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
     `type_of_estate` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
     `rooms` INT(2) NOT NULL ,

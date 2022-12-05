@@ -1,1 +1,1 @@
-DROP TABLE `u1803158_default`.`estate_lots`;
+DROP TABLE `estate_lots`;

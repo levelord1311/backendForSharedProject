@@ -131,7 +131,7 @@ func (s *server) handleGetFreshEstateLots() http.HandlerFunc {
 			s.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
-		s.respond(w, r, http.StatusCreated, &lots)
+		s.respond(w, r, http.StatusOK, &lots)
 	}
 }
 
