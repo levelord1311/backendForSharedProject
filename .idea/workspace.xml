@@ -5,54 +5,81 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19f7c286-4b58-41df-abef-1f7ca6ee8d15" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/cmd/apiserver/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/app/apiserver/apiserver.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/app/apiserver/config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/app/apiserver/googledata.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/app/apiserver/server_internal_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/app/model/testing.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/app/model_test/user_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/app/store/sqlstore/estateLotRepository.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/app/store/sqlstore_test/store_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/app/store/sqlstore_test/userRepository_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/app/store/teststore/estatelotrepository.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/app/store/teststore/estatelotrepository_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/app/store/teststore/store.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/app/store/teststore/userrepository.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/app/store/teststore/userrepository_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/internal/config/config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/pkg/logging/logging.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/cmd/main/app.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/internal/client/user_service/model.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/internal/client/user_service/service.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/internal/handlers/auth/handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/internal/handlers/googleAuth/handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/internal/handlers/handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/pkg/apperror/error.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/pkg/apperror/middleware.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/pkg/handlers/metric/handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/pkg/jwt/helper.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/pkg/jwt/jwt.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/pkg/jwt/middleware.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/pkg/metric/handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/pkg/rest/api.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/pkg/rest/client.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/pkg/rest/errors.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/pkg/rest/url.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/app/pkg/shutdown/shutdown.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_service/app/cmd/main/app.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_service/app/internal/config/config.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_service/app/internal/handlers/handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_service/app/internal/user/db/mysql.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_service/app/internal/user/model.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_service/app/internal/user/service.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_service/app/internal/user/storage.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_service/app/pkg/apperror/error.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_service/app/pkg/apperror/middleware.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_service/app/pkg/logging/logging.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_service/app/pkg/metric/handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_service/app/pkg/mysql/client.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_service/app/pkg/shutdown/shutdown.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6cb1b0e9-1f17-45e1-b60e-1ca39fce40ac.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/6cb1b0e9-1f17-45e1-b60e-1ca39fce40ac.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/certificates/cert.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/certificates/certificates.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/certificates/key.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/apiserver/main.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/app/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/app/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/apiserver/apiserver.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/apiserver/config.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/apiserver/googleJWT.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/apiserver/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/apiserver/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/jwt/jwt.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/pkg/jwt/jwt.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/model/estateLot.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/model/estateLot.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/model/rawTime.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/model/rawtime.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/model/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/model/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/model/validations.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/model/validations.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/store/errors.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/store/errors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/store/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/store/repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/store/sqlstore/store.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/store/sqlstore/store.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/store/sqlstore/userrepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/store/sqlstore/userrepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/store/store.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/internal/app/store/store.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/20221109105920_create_users.down.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20221109105920_create_users.down.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/20221109105920_create_users.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20221109105920_create_users.up.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/20221109120110_create_estate_lots.down.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20221109120110_create_estate_lots.down.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/20221109120110_create_estate_lots.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20221109120110_create_estate_lots.up.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/cmd/apiserver/main.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/apiserver/apiserver.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/apiserver/apiserver.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/apiserver/config.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/apiserver/googledata.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/apiserver/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/apiserver/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/apiserver/server_internal_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/apiserver/server_internal_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/model/estateLot.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/model/estateLot.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/model/rawtime.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/model/rawtime.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/model/testing.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/model/testing.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/model/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/model/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/model/validations.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/model/validations.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/model_test/user_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/model_test/user_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/store/errors.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/store/errors.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/store/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/store/repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/store/sqlstore/estateLotRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore/estateLotRepository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/store/sqlstore/store.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore/store.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/store/sqlstore/testing.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore/testing.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/store/sqlstore/userrepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore/userrepository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/store/sqlstore_test/store_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore_test/store_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/store/sqlstore_test/userRepository_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore_test/userRepository_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/store/store.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/store/store.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/store/teststore/estatelotrepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/estatelotrepository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/store/teststore/estatelotrepository_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/estatelotrepository_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/store/teststore/store.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/store.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/store/teststore/userrepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/userrepository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/app/store/teststore/userrepository_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/userrepository_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/internal/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/config/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/pkg/jwt/jwt.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/pkg/logging/logging.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/pkg/logging/logging.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/20221109105920_create_users.down.sql" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/migrations/20221109105920_create_users.down.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/20221109105920_create_users.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/migrations/20221109105920_create_users.up.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/20221109120110_create_estate_lots.down.sql" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/migrations/20221109120110_create_estate_lots.down.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/20221109120110_create_estate_lots.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/migrations/20221109120110_create_estate_lots.up.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,14 +98,13 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/app/cmd/apiserver/main.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/app/internal/app/apiserver/apiserver.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/app/internal/app/apiserver/googledata.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/app/internal/app/apiserver/server.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/app/internal/app/model/user.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/app/internal/app/store/repository.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/app/internal/app/store/sqlstore/userrepository.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/app/pkg/jwt/jwt.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/api_service/app/cmd/main/app.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/api_service/app/internal/app/apiserver/apiserver.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/api_service/app/internal/app/apiserver/server.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/api_service/app/internal/app/model/user.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/api_service/app/internal/app/store/repository.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore/userrepository.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/api_service/app/pkg/jwt/jwt.go" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -104,7 +130,7 @@
     "configurable.GoLibrariesConfigurable.is.expanded": "true",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "C:/Users/rmv13/GolandProjects/httpserver",
+    "last_opened_file_path": "C:/Users/rmv13/GolandProjects/backendForSharedProject",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "goland.project.structure"
   },
@@ -116,14 +142,18 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\api_service\app\pkg" />
+      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\user_service\app" />
+      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\user_service\app\pkg" />
+      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\app\pkg" />
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\pkg" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\api_service\app\internal" />
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject" />
+      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\api_service" />
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\app" />
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\pkg" />
-      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\internal\app\store\sqlstore" />
-      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\internal\app\model_test" />
     </key>
   </component>
   <component name="RunManager" selected="Go Test.TestServer_HandleEstateLotsCreate in backendForSharedProject/internal/app/apiserver">
