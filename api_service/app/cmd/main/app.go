@@ -4,9 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
+	"github.com/levelord1311/backendForSharedProject/api_service/internal/client/lot_service"
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/client/user_service"
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/config"
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/handlers/auth"
+	"github.com/levelord1311/backendForSharedProject/api_service/internal/handlers/lots"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/jwt"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/logging"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/metric"
@@ -26,10 +28,11 @@ import (
 // TODO сделать ответы микросервисов доступными только для запросов от api service
 // TODO JWT refresh токены, хотя бы в кеше (попробовать в redis?). Или сгенерить как JWT?
 /*
-   Зачем держать в кеше refresh_token?
+   "Зачем держать в кеше refresh_token?
    При рестарте в течение часа 100% пользователей разлогинит.
-   Его же точно так же можно сгенерить как jwt и не хранить вообще ничего
+   Его же точно так же можно сгенерить как jwt и не хранить вообще ничего"
 */
+// TODO тесты
 
 func main() {
 
@@ -54,6 +57,10 @@ func main() {
 	userService := user_service.NewService(cfg.UserService.URL, "/users", logger)
 	authHandler := auth.Handler{JWTHelper: jwtHelper, UserService: userService, Logger: logger}
 	authHandler.Register(router)
+
+	lotService := lot_service.NewService(cfg.LotService.URL, "/lots", logger)
+	lotsHandler := lots.Handler{LotService: lotService, Logger: logger}
+	lotsHandler.Register(router)
 
 	logger.Println("starting application...")
 	start(router, logger, cfg)

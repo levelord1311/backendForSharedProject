@@ -28,12 +28,12 @@ type Config struct {
 	UserService struct {
 		URL string `yaml:"url" env-required:"true"`
 	} `yaml:"user_service" env-required:"true"`
+	LotService struct {
+		URL string `yaml:"url" env-required:"true"`
+	} `yaml:"lot_service" env-required:"true"`
 	//CategoryService struct {
 	//	URL string `yaml:"url" env-required:"true"`
 	//} `yaml:"category_service" env-required:"true"`
-	//NoteService struct {
-	//	URL string `yaml:"url" env-required:"true"`
-	//} `yaml:"note_service" env-required:"true"`
 	//TagService struct {
 	//	URL string `yaml:"url" env-required:"true"`
 	//} `yaml:"tag_service" env-required:"true"`

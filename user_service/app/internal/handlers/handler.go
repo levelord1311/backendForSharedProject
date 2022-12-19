@@ -12,6 +12,7 @@ import (
 )
 
 const (
+	authURL       = "/api/users/auth"
 	usersURL      = "/api/users"
 	singleUserURL = "/api/users/:id"
 )
@@ -22,7 +23,7 @@ type Handler struct {
 }
 
 func (h *Handler) Register(router *httprouter.Router) {
-	router.HandlerFunc(http.MethodGet, usersURL, apperror.Middleware(h.SignIn))
+	router.HandlerFunc(http.MethodPost, authURL, apperror.Middleware(h.SignIn))
 	router.HandlerFunc(http.MethodPost, usersURL, apperror.Middleware(h.CreateUser))
 	router.HandlerFunc(http.MethodGet, singleUserURL, apperror.Middleware(h.GetUser))
 	router.HandlerFunc(http.MethodPatch, singleUserURL, apperror.Middleware(h.PartiallyUpdateUser))
@@ -33,19 +34,16 @@ func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) error {
 	h.Logger.Info("GET USER")
 	w.Header().Set("Content-Type", "application/json")
 
-	h.Logger.Debug("get id from context")
+	h.Logger.Debug("getting id from context..")
 	params := r.Context().Value(httprouter.ParamsKey).(httprouter.Params)
-	userID, err := strconv.Atoi(params.ByName("id"))
+	userID := params.ByName("id")
+
+	user, err := h.UserService.GetByID(r.Context(), userID)
 	if err != nil {
 		return err
 	}
 
-	user, err := h.UserService.GetByID(r.Context(), uint(userID))
-	if err != nil {
-		return err
-	}
-
-	h.Logger.Debug("marshal user")
+	h.Logger.Debug("marshalling user..")
 	userBytes, err := json.Marshal(user)
 	if err != nil {
 		return fmt.Errorf("failed to marshall user. error: %w", err)
@@ -60,7 +58,7 @@ func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) error {
 	h.Logger.Info("CREATE USER")
 	w.Header().Set("Content-Type", "application/json")
 
-	h.Logger.Debug("decode create user dto")
+	h.Logger.Debug("decoding data to create user dto..")
 	var crUser *user.CreateUserDTO
 
 	if err := json.NewDecoder(r.Body).Decode(&crUser); err != nil {
@@ -78,25 +76,26 @@ func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-// TODO CHECK ALL HANDLERS BELOW
 func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) error {
-	h.Logger.Info("GET USER BY LOGIN AND PASSWORD")
+	h.Logger.Info("SIGN IN USER WITH LOGIN AND PASSWORD")
 	w.Header().Set("Content-Type", "application/json")
 
-	h.Logger.Debug("get email and password from URL")
-	email := r.URL.Query().Get("email")
-	password := r.URL.Query().Get("password")
-	if email == "" || password == "" {
-		return apperror.BadRequestError("invalid query parameters email or password")
-	}
+	h.Logger.Debug("decoding data to create user dto..")
+	var signUser *user.SignInUserDTO
 
-	user, err := h.UserService.SignIn(r.Context(), email, password)
+	if err := json.NewDecoder(r.Body).Decode(&signUser); err != nil {
+		return apperror.BadRequestError("invalid JSON scheme. check swagger API")
+	}
+	defer r.Body.Close()
+
+	h.Logger.Debugf("decoded DTO:%v", signUser)
+	u, err := h.UserService.SignIn(r.Context(), signUser)
 	if err != nil {
 		return err
 	}
-
-	h.Logger.Debug("marshal user")
-	userBytes, err := json.Marshal(user)
+	h.Logger.Debugf("recieved user:%v", u)
+	h.Logger.Debug("marshalling user..")
+	userBytes, err := json.Marshal(&u)
 	if err != nil {
 		return err
 	}
@@ -134,22 +133,21 @@ func (h *Handler) PartiallyUpdateUser(w http.ResponseWriter, r *http.Request) er
 	return nil
 }
 
-func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) error {
-	h.Logger.Info("DELETE USER")
-	w.Header().Set("Content-Type", "application/json")
+// TODO исправить delete - вместо полноценного удаления из БД вешать признак "пометка на удаление"
 
-	h.Logger.Debug("get id from context")
-	params := r.Context().Value(httprouter.ParamsKey).(httprouter.Params)
-	userID, err := strconv.Atoi(params.ByName("id"))
-	if err != nil {
-		return err
-	}
-
-	err = h.UserService.Delete(r.Context(), uint(userID))
-	if err != nil {
-		return err
-	}
-	w.WriteHeader(http.StatusNoContent)
-
-	return nil
-}
+//func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) error {
+//	h.Logger.Info("DELETE USER")
+//	w.Header().Set("Content-Type", "application/json")
+//
+//	h.Logger.Debug("get id from context")
+//	params := r.Context().Value(httprouter.ParamsKey).(httprouter.Params)
+//	userID := params.ByName("id")
+//
+//	err := h.UserService.Delete(r.Context(), userID)
+//	if err != nil {
+//		return err
+//	}
+//	w.WriteHeader(http.StatusNoContent)
+//
+//	return nil
+//}

@@ -1,5 +1,6 @@
-CREATE TABLE `estate_lots` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+CREATE TABLE `lots` (
+    `lot_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+    `user_id` INT UNSIGNED NOT NULL,
     `type_of_estate` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
     `rooms` INT(2) NOT NULL ,
     `area` INT(4) NOT NULL ,
@@ -12,5 +13,6 @@ CREATE TABLE `estate_lots` (
     `price` INT NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `redacted_at` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`lot_id`),
+    FOREIGN KEY (`user_id`) REFERENCES users(user_id)
     ) ENGINE = InnoDB;

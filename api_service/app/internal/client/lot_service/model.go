@@ -1,0 +1,40 @@
+package lot_service
+
+import "time"
+
+type Lot struct {
+	ID              uint   `json:"id"`
+	CreatedByUserID uint   `json:"created_by_user_id"`
+	TypeOfEstate    string `json:"type_of_estate"`
+	Rooms           int    `json:"rooms"`
+	Area            int    `json:"area"`
+	Floor           int    `json:"floor"`
+	MaxFloor        int    `json:"max_floor"`
+	City            string `json:"city"`
+	District        string `json:"district"`
+	Street          string `json:"street"`
+	Building        string `json:"building"`
+	Price           int    `json:"price"`
+	CreatedAt       time.Time
+	RedactedAt      time.Time
+}
+
+type CreateLotDTO struct {
+	CreatedByUserID uint   `json:"created_by_user_id"`
+	TypeOfEstate    string `json:"type_of_estate"`
+	Rooms           int    `json:"rooms"`
+	Area            int    `json:"area"`
+	Floor           int    `json:"floor"`
+	MaxFloor        int    `json:"max_floor"`
+	City            string `json:"city"`
+	District        string `json:"district"`
+	Street          string `json:"street"`
+	Building        string `json:"building"`
+	Price           int    `json:"price"`
+}
+
+type UpdateLotDTO struct {
+	ID              uint `json:"id"`
+	CreatedByUserID uint `json:"created_by_user_id"`
+	Price           int  `json:"price"`
+}

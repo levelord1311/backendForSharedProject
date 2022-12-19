@@ -3,7 +3,7 @@ package auth
 import (
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
-	user_service2 "github.com/levelord1311/backendForSharedProject/api_service/internal/client/user_service"
+	"github.com/levelord1311/backendForSharedProject/api_service/internal/client/user_service"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/apperror"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/jwt"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/logging"
@@ -17,7 +17,7 @@ const (
 
 type Handler struct {
 	Logger      logging.Logger
-	UserService user_service2.UserService
+	UserService user_service.UserService
 	JWTHelper   jwt.Helper
 }
 
@@ -31,7 +31,7 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) error {
 
 	defer r.Body.Close()
 
-	var dto *user_service2.CreateUserDTO
+	var dto *user_service.CreateUserDTO
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
 		return apperror.BadRequestError("failed to decode data")
 	}
@@ -61,14 +61,15 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) error {
 	switch r.Method {
 	case http.MethodPost:
 		defer r.Body.Close()
-		dto := &user_service2.SignInUserDTO{}
+		dto := &user_service.SignInUserDTO{}
 		if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
 			return apperror.BadRequestError("failed to decode data")
 		}
-		u, err := h.UserService.SignIn(r.Context(), dto.Login, dto.Password)
+		u, err := h.UserService.SignIn(r.Context(), dto)
 		if err != nil {
 			return err
 		}
+		h.Logger.Debugf("user:%v", u)
 		token, err = h.JWTHelper.GenerateAccessToken(u)
 		if err != nil {
 			return err

@@ -5,6 +5,7 @@ import (
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/client/user_service"
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/config"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/logging"
+	"strconv"
 	"time"
 )
 
@@ -36,11 +37,13 @@ func (h *helper) GenerateAccessToken(u *user_service.User) ([]byte, error) {
 	// TODO get user struct param from user_service
 	key := []byte(config.GetConfig().JWT.Secret)
 
+	userIDStr := strconv.Itoa(int(u.ID))
+
 	claims := &UserClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Audience:  []string{"users"},
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour)),
-			ID:        string(u.ID),
+			ID:        userIDStr,
 		},
 		Email:    u.Email,
 		Username: u.Username,

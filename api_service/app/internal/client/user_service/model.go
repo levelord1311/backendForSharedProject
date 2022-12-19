@@ -1,6 +1,8 @@
 package user_service
 
-import "time"
+import (
+	"time"
+)
 
 type User struct {
 	ID                uint      `json:"id"`

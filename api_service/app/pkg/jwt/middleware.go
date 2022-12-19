@@ -13,18 +13,18 @@ import (
 func Middleware(endpointHandler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		var claims *UserClaims
+		claims := &UserClaims{}
 		logger := logging.GetLogger()
 		key := []byte(config.GetConfig().JWT.Secret)
 
-		logger.Debug("searching for \"Token\" in header...")
+		logger.Debug("searching for 'Token' in header...")
 		if r.Header["Token"] == nil {
-			err := errors.New("\"Token\" field has not been found in header")
+			err := errors.New("'Token' field has not been found in header")
 			unauthorized(w, err)
 			return
 		}
 
-		logger.Debug("\"Token\" field has been found, parsing...")
+		logger.Debug("'Token' field has been found, parsing...")
 
 		token, err := jwt.ParseWithClaims(r.Header["Token"][0], claims, func(token *jwt.Token) (interface{}, error) {
 			_, ok := token.Method.(*jwt.SigningMethodHMAC)
@@ -56,7 +56,7 @@ func Middleware(endpointHandler http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), "user_uuid", claims.ID)
+		ctx := context.WithValue(r.Context(), "user_id", claims.ID)
 		endpointHandler(w, r.WithContext(ctx))
 	}
 }

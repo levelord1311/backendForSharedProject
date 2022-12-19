@@ -46,13 +46,17 @@ func (c *BaseClient) SendRequest(r *http.Request) (*APIResponse, error) {
 	return &apiResponse, nil
 }
 
-func (c *BaseClient) BuildURL(resource string, filters []FilterOptions) (string, error) {
+// BuildURL expects for subResource exactly one argument or none. Other than first will be ignored.
+func (c *BaseClient) BuildURL(resource string, filters []FilterOptions, subResource ...string) (string, error) {
 	var resultURL string
 	parsedURL, err := url.ParseRequestURI(c.BaseURL)
 	if err != nil {
 		return resultURL, fmt.Errorf("failed to parse base URL. error: %w", err)
 	}
 	parsedURL.Path = path.Join(parsedURL.Path, resource)
+	if len(subResource) > 0 {
+		parsedURL.Path = path.Join(parsedURL.Path, subResource[0])
+	}
 
 	if len(filters) > 0 {
 		q := parsedURL.Query()

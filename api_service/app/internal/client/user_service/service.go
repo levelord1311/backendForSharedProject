@@ -37,36 +37,32 @@ func NewService(baseURL string, resource string, logger logging.Logger) *client 
 }
 
 type UserService interface {
-	SignIn(ctx context.Context, login, password string) (*User, error)
+	SignIn(ctx context.Context, dto *SignInUserDTO) (*User, error)
 	GetByID(ctx context.Context, id uint) (*User, error)
 	Create(ctx context.Context, dto *CreateUserDTO) (*User, error)
 	Update(ctx context.Context, id uint, dto *UpdateUserDTO) error
 	Delete(ctx context.Context, id uint) error
 }
 
-func (c *client) SignIn(ctx context.Context, login, password string) (*User, error) {
-
-	c.base.Logger.Debug("adding login and password to filter options...")
-	filters := []rest.FilterOptions{
-		{
-			Field:  "login",
-			Values: []string{login},
-		},
-		{
-			Field:  "password",
-			Values: []string{password},
-		},
-	}
+func (c *client) SignIn(ctx context.Context, dto *SignInUserDTO) (*User, error) {
 
 	c.base.Logger.Debug("building url with resource and filter...")
-	uri, err := c.base.BuildURL(c.resource, filters)
+	uri, err := c.base.BuildURL(c.resource, nil, "/auth")
 	if err != nil {
-		return nil, fmt.Errorf("failed to build URL due to error: %w", err)
+		return nil, fmt.Errorf("failed to build URL. error: %w", err)
 	}
 	c.base.Logger.Tracef("url: %s", uri)
 
+	c.base.Logger.Debug("marshaling dto to bytes...")
+	dataBytes, err := json.Marshal(dto)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal dto due to err: %w", err)
+	}
+
+	c.base.Logger.Tracef("url: %s", uri)
+
 	c.base.Logger.Debug("creating new request...")
-	req, err := http.NewRequest(http.MethodGet, uri, nil)
+	req, err := http.NewRequest(http.MethodPost, uri, bytes.NewBuffer(dataBytes))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create new request due to error: %w", err)
 	}
@@ -87,8 +83,10 @@ func (c *client) SignIn(ctx context.Context, login, password string) (*User, err
 			response.Error.DeveloperMessage)
 	}
 
+	defer response.Body().Close()
+	c.base.Logger.Debug("response received, decoding body")
 	u := &User{}
-	if err = json.NewDecoder(response.Body()).Decode(&u); err != nil {
+	if err = json.NewDecoder(response.Body()).Decode(u); err != nil {
 		return nil, fmt.Errorf("failed to decode body due to error: %w", err)
 	}
 
@@ -129,8 +127,8 @@ func (c *client) GetByID(ctx context.Context, id uint) (*User, error) {
 	defer response.Body().Close()
 
 	u := &User{}
-
-	err = json.NewDecoder(response.Body()).Decode(&u)
+	c.base.Logger.Debug("response received, decoding body")
+	err = json.NewDecoder(response.Body()).Decode(u)
 	if err != nil {
 		return nil, fmt.Errorf("failed to decode body due to error: %w", err)
 	}
@@ -140,26 +138,26 @@ func (c *client) GetByID(ctx context.Context, id uint) (*User, error) {
 
 func (c *client) Create(ctx context.Context, dto *CreateUserDTO) (*User, error) {
 
-	c.base.Logger.Debug("building url with resource and filter...")
+	c.base.Logger.Debug("building url with resource and filter..")
 	uri, err := c.base.BuildURL(c.resource, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build URL. error: %w", err)
 	}
 	c.base.Logger.Tracef("url: %s", uri)
 
-	c.base.Logger.Debug("marshaling dto to bytes...")
+	c.base.Logger.Debug("marshaling dto to bytes..")
 	dataBytes, err := json.Marshal(dto)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal dto due to err: %w", err)
 	}
 
-	c.base.Logger.Debug("creating new request...")
+	c.base.Logger.Debug("creating new request..")
 	req, err := http.NewRequest(http.MethodPost, uri, bytes.NewBuffer(dataBytes))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create new request due to error: %w", err)
 	}
 
-	c.base.Logger.Debug("sending created request")
+	c.base.Logger.Debug("sending created request..")
 	// TODO implement circuit breaker pattern (i. e. hystrix lib)
 	reqCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
@@ -210,13 +208,13 @@ func (c *client) Update(ctx context.Context, id uint, dto *UpdateUserDTO) error 
 		return fmt.Errorf("failed to marshal dto due to err: %w", err)
 	}
 
-	c.base.Logger.Debug("create new request")
+	c.base.Logger.Debug("creating new request..")
 	req, err := http.NewRequest(http.MethodPatch, uri, bytes.NewBuffer(dataBytes))
 	if err != nil {
 		return fmt.Errorf("failed to create new request due to error: %w", err)
 	}
 
-	c.base.Logger.Debug("send request")
+	c.base.Logger.Debug("sending created request..")
 	reqCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 	req = req.WithContext(reqCtx)

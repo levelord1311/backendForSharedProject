@@ -43,7 +43,7 @@ type UpdateUserDTO struct {
 	NewPassword string `json:"new_password,omitempty"`
 }
 
-type SignInUser struct {
+type SignInUserDTO struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
 }
@@ -84,6 +84,10 @@ func (u *User) ComparePassword(password string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(u.EncryptedPassword), []byte(password)) == nil
 }
 
+func (u *User) RemoveEncryptedPassword() {
+	u.EncryptedPassword = ""
+}
+
 func requiredIf(cond bool) validation.RuleFunc {
 	return func(value interface{}) error {
 		if cond {
@@ -99,4 +103,11 @@ func encryptString(s string) (string, error) {
 		return "", err
 	}
 	return string(b), nil
+}
+
+func (dto *UpdateUserDTO) ValidateFields() error {
+	return validation.ValidateStruct(dto,
+		validation.Field(&dto.OldPassword, validation.Required),
+		validation.Field(&dto.NewPassword, validation.Required),
+	)
 }

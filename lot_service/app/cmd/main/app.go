@@ -4,14 +4,14 @@ import (
 	"errors"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"github.com/levelord1311/backendForSharedProject/user_service/internal/config"
-	"github.com/levelord1311/backendForSharedProject/user_service/internal/handlers"
-	"github.com/levelord1311/backendForSharedProject/user_service/internal/user"
-	"github.com/levelord1311/backendForSharedProject/user_service/internal/user/db"
-	"github.com/levelord1311/backendForSharedProject/user_service/pkg/logging"
-	"github.com/levelord1311/backendForSharedProject/user_service/pkg/metric"
-	"github.com/levelord1311/backendForSharedProject/user_service/pkg/mysql"
-	"github.com/levelord1311/backendForSharedProject/user_service/pkg/shutdown"
+	"github.com/levelord1311/backendForSharedProject/lot_service/internal/config"
+	"github.com/levelord1311/backendForSharedProject/lot_service/internal/handlers"
+	"github.com/levelord1311/backendForSharedProject/lot_service/internal/lot"
+	"github.com/levelord1311/backendForSharedProject/lot_service/internal/lot/db"
+	"github.com/levelord1311/backendForSharedProject/lot_service/pkg/logging"
+	"github.com/levelord1311/backendForSharedProject/lot_service/pkg/metric"
+	"github.com/levelord1311/backendForSharedProject/lot_service/pkg/mysql"
+	"github.com/levelord1311/backendForSharedProject/lot_service/pkg/shutdown"
 	"net"
 	"net/http"
 	"os"
@@ -47,18 +47,18 @@ func main() {
 		logger.Fatalln(err)
 	}
 
-	userStorage := db.NewStorage(mysqlClient, logger)
-	userService, err := user.NewService(userStorage, logger)
+	lotStorage := db.NewStorage(mysqlClient, logger)
+	lotService, err := lot.NewService(lotStorage, logger)
 	if err != nil {
 		logger.Fatalln(err)
 	}
 
 	logger.Println("initializing handlers..")
-	usersHandler := handlers.Handler{
-		Logger:      logger,
-		UserService: userService,
+	lotsHandler := handlers.Handler{
+		Logger:     logger,
+		LotService: lotService,
 	}
-	usersHandler.Register(router)
+	lotsHandler.Register(router)
 
 	logger.Println("starting application...")
 	start(router, logger, cfg)

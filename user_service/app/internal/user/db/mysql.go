@@ -60,7 +60,7 @@ func (s *db) FindByEmail(ctx context.Context, email string) (*user.User, error) 
 	var createdAt, redactedAt *rawTime
 
 	queryString := `
-	SELECT id, username, email, 
+	SELECT user_id, username, email, encrypted_password,
 	IFNULL(given_name, ""),
 	IFNULL(family_name, ""),
 	created_at, redacted_at
@@ -71,6 +71,7 @@ func (s *db) FindByEmail(ctx context.Context, email string) (*user.User, error) 
 		&u.ID,
 		&u.Username,
 		&u.Email,
+		&u.EncryptedPassword,
 		&u.GivenName,
 		&u.FamilyName,
 		&createdAt,
@@ -101,7 +102,7 @@ func (s *db) FindByUsername(ctx context.Context, username string) (*user.User, e
 	var createdAt, redactedAt *rawTime
 
 	queryString := `
-	SELECT id, username, email, 
+	SELECT user_id, username, email, encrypted_password,
 	IFNULL(given_name, ""),
 	IFNULL(family_name, ""),
 	created_at, redacted_at
@@ -112,6 +113,7 @@ func (s *db) FindByUsername(ctx context.Context, username string) (*user.User, e
 		&u.ID,
 		&u.Username,
 		&u.Email,
+		&u.EncryptedPassword,
 		&u.GivenName,
 		&u.FamilyName,
 		&createdAt,
@@ -143,17 +145,18 @@ func (s *db) FindByID(ctx context.Context, id uint) (*user.User, error) {
 	var createdAt, redactedAt *rawTime
 
 	queryString := `
-	SELECT id, username, email, 
+	SELECT user_id, username, email, encrypted_password,
 	IFNULL(given_name, ""),
 	IFNULL(family_name, ""),
 	created_at, redacted_at
 	FROM users 
-	WHERE id=?;`
+	WHERE user_id=?;`
 
 	err := s.db.QueryRowContext(ctx, queryString, id).Scan(
 		&u.ID,
 		&u.Username,
 		&u.Email,
+		&u.EncryptedPassword,
 		&u.GivenName,
 		&u.FamilyName,
 		&createdAt,
@@ -183,7 +186,7 @@ func (s *db) Update(ctx context.Context, user *user.User) error {
 	queryString := `
 	UPDATE users
 	SET encrypted_password=?
-	WHERE id=?;`
+	WHERE user_id=?;`
 	stmt, err := s.db.PrepareContext(ctx, queryString)
 	if err != nil {
 		return err
@@ -201,7 +204,7 @@ func (s *db) Delete(ctx context.Context, id uint) error {
 	queryString := `
 	DELETE
 	FROM users 
-	WHERE id=?;`
+	WHERE user_id=?;`
 	stmt, err := s.db.PrepareContext(ctx, queryString)
 	if err != nil {
 		return err

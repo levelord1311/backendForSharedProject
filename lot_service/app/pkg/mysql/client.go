@@ -2,7 +2,7 @@ package mysql
 
 import (
 	"database/sql"
-	"github.com/levelord1311/backendForSharedProject/user_service/pkg/logging"
+	"github.com/levelord1311/backendForSharedProject/lot_service/pkg/logging"
 )
 
 func NewClient(logger logging.Logger, databaseURL string) (*sql.DB, error) {
