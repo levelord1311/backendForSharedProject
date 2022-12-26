@@ -4,14 +4,18 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
+	sq "github.com/Masterminds/squirrel"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/levelord1311/backendForSharedProject/lot_service/internal/apperror"
 	"github.com/levelord1311/backendForSharedProject/lot_service/internal/lot"
-	"github.com/levelord1311/backendForSharedProject/lot_service/pkg/apperror"
+	"github.com/levelord1311/backendForSharedProject/lot_service/internal/lot/storage"
 	"github.com/levelord1311/backendForSharedProject/lot_service/pkg/logging"
+	"strings"
 	"time"
 )
 
-var _ lot.Storage = &db{}
+var _ storage.Repository = &db{}
 
 type db struct {
 	db     *sql.DB
@@ -173,6 +177,65 @@ func (s *db) FindByUserID(ctx context.Context, id uint) ([]*lot.Lot, error) {
 	return lotsByUser, nil
 }
 
+func (s *db) FindWithFilter(ctx context.Context, qo storage.QueryOptions) ([]*lot.Lot, error) {
+	qb := sq.Select("*").From("lots")
+
+	fo := qo.GetFilters()
+	if len(fo) != 0 {
+		qb = addFilters(qb, fo)
+	}
+
+	sqlQ, args, err := qb.ToSql()
+	if err != nil {
+		return nil, err
+	}
+	s.logger.Tracef("SQL Query: %s", formatQuery(sqlQ))
+
+	rows, err := s.db.QueryContext(ctx, sqlQ, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	lots := make([]*lot.Lot, 0)
+	for rows.Next() {
+		l := &lot.Lot{}
+		var createdAt, redactedAt *rawTime
+		if err = rows.Scan(
+			&l.ID,
+			&l.CreatedByUserID,
+			&l.TypeOfEstate,
+			&l.Rooms,
+			&l.Area,
+			&l.Floor,
+			&l.MaxFloor,
+			&l.City,
+			&l.District,
+			&l.Street,
+			&l.Building,
+			&l.Price,
+			&createdAt,
+			&redactedAt,
+		); err != nil {
+			return nil, err
+		}
+		l.CreatedAt, err = createdAt.time()
+		if err != nil {
+			return nil, err
+		}
+
+		l.RedactedAt, err = redactedAt.time()
+		if err != nil {
+			return nil, err
+		}
+		lots = append(lots, l)
+	}
+	if err = rows.Err(); err != nil {
+		return lots, err
+	}
+	return lots, nil
+
+}
+
 func (s *db) Update(ctx context.Context, lot *lot.Lot) error {
 	queryString := `
 	UPDATE lots
@@ -220,4 +283,35 @@ func (s *db) Delete(ctx context.Context, lotID, userID uint) error {
 		return apperror.ErrNotFound
 	}
 	return nil
+}
+
+func formatQuery(q string) string {
+	return strings.ReplaceAll(strings.ReplaceAll(q, "\t", ""), "\n", " ")
+}
+
+func addFilters(qb sq.SelectBuilder, fo map[string][]storage.FilterOption) sq.SelectBuilder {
+	for k, filters := range fo {
+		queryValues := ""
+		for i, values := range filters {
+			for j, v := range values.Value {
+				switch values.Type {
+				case "date":
+					fallthrough
+				case "string":
+					v = fmt.Sprintf("\"%s\"", v)
+				}
+				if i == 0 && j == 0 {
+					queryValues = fmt.Sprintf("(%s %s %v", k, values.Operator, v)
+				} else if j != 0 {
+					queryValues = fmt.Sprintf("%s %s %s", queryValues, "AND", v)
+				} else {
+					queryValues = fmt.Sprintf("%s %s %s %s %s", queryValues, "OR", k, values.Operator, v)
+				}
+			}
+
+		}
+		queryValues = fmt.Sprintf("%s)", queryValues)
+		qb = qb.Where(queryValues)
+	}
+	return qb
 }

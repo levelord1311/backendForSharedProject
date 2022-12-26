@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
+	"github.com/levelord1311/backendForSharedProject/lot_service/internal/apperror"
 	"github.com/levelord1311/backendForSharedProject/lot_service/internal/lot"
-	"github.com/levelord1311/backendForSharedProject/lot_service/pkg/apperror"
+	"github.com/levelord1311/backendForSharedProject/lot_service/internal/lot/service"
+	"github.com/levelord1311/backendForSharedProject/lot_service/pkg/api/sort"
 	"github.com/levelord1311/backendForSharedProject/lot_service/pkg/logging"
 	"net/http"
 	"strconv"
@@ -19,12 +21,13 @@ const (
 
 type Handler struct {
 	Logger     logging.Logger
-	LotService lot.Service
+	LotService service.Service
 }
 
 func (h *Handler) Register(router *httprouter.Router) {
 	router.HandlerFunc(http.MethodPost, lotsURL, apperror.Middleware(h.CreateLot))
 	router.HandlerFunc(http.MethodGet, singleLotURL, apperror.Middleware(h.GetLot))
+	router.HandlerFunc(http.MethodGet, lotsURL, sort.Middleware(apperror.Middleware(h.GetLots)))
 	router.HandlerFunc(http.MethodGet, lotsOfUser, apperror.Middleware(h.GetLotsByUser))
 	router.HandlerFunc(http.MethodPatch, singleLotURL, apperror.Middleware(h.UpdateLotPrice))
 	//	router.HandlerFunc(http.MethodDelete, singleLotURL, apperror.Middleware(h.DeleteLot))
@@ -38,7 +41,7 @@ func (h *Handler) CreateLot(w http.ResponseWriter, r *http.Request) error {
 	dto := &lot.CreateLotDTO{}
 	defer r.Body.Close()
 	if err := json.NewDecoder(r.Body).Decode(dto); err != nil {
-		return apperror.BadRequestError("invalid data")
+		return apperror.BadRequestError("invalid data", "")
 	}
 
 	lotID, err := h.LotService.Create(r.Context(), dto)
@@ -67,7 +70,7 @@ func (h *Handler) GetLot(w http.ResponseWriter, r *http.Request) error {
 	h.Logger.Debug("marshalling lot..")
 	lotBytes, err := json.Marshal(l)
 	if err != nil {
-		return fmt.Errorf("failed to marshall user. error: %w", err)
+		return fmt.Errorf("failed to marshall lot. error: %w", err)
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -100,6 +103,28 @@ func (h *Handler) GetLotsByUser(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+func (h *Handler) GetLots(w http.ResponseWriter, r *http.Request) error {
+
+	h.Logger.Info("GET LOTS")
+	w.Header().Set("Content-Type", "application/json")
+
+	lots, err := h.LotService.GetLotsWithFilter(r.Context(), r.URL.Query())
+	if err != nil {
+		return err
+	}
+
+	h.Logger.Debug("marshalling lots..")
+	lotsBytes, err := json.Marshal(lots)
+	if err != nil {
+		return fmt.Errorf("failed to marshall lots. error: %w", err)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(lotsBytes)
+
+	return nil
+}
+
 func (h *Handler) UpdateLotPrice(w http.ResponseWriter, r *http.Request) error {
 	h.Logger.Info("UPDATE LOT PRICE")
 	w.Header().Set("Content-Type", "application/json")
@@ -117,7 +142,7 @@ func (h *Handler) UpdateLotPrice(w http.ResponseWriter, r *http.Request) error {
 	var dto *lot.UpdateLotDTO
 	defer r.Body.Close()
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
-		return apperror.BadRequestError("invalid data")
+		return apperror.BadRequestError("invalid data", "")
 	}
 
 	dto.ID = uint(lotID)

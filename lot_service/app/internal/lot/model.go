@@ -66,7 +66,7 @@ func UpdatedLot(dto *UpdateLotDTO) *Lot {
 	}
 }
 
-func (l *Lot) validateFields() error {
+func (l *Lot) ValidateFields() error {
 	return validation.ValidateStruct(
 		l,
 		validation.Field(&l.CreatedByUserID, validation.Required),
@@ -87,7 +87,7 @@ func (l *Lot) validateFields() error {
 	)
 }
 
-func (dto *UpdateLotDTO) validateFields() error {
+func (dto *UpdateLotDTO) ValidateFields() error {
 	return validation.ValidateStruct(dto,
 		validation.Field(&dto.ID, validation.Required),
 		validation.Field(&dto.CreatedByUserID, validation.Required),

@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/levelord1311/backendForSharedProject/api_service/pkg/apperror"
+	"github.com/levelord1311/backendForSharedProject/api_service/internal/apperror"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/logging"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/rest"
 	"net/http"

@@ -6,8 +6,8 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/levelord1311/backendForSharedProject/lot_service/internal/config"
 	"github.com/levelord1311/backendForSharedProject/lot_service/internal/handlers"
-	"github.com/levelord1311/backendForSharedProject/lot_service/internal/lot"
 	"github.com/levelord1311/backendForSharedProject/lot_service/internal/lot/db"
+	"github.com/levelord1311/backendForSharedProject/lot_service/internal/lot/service"
 	"github.com/levelord1311/backendForSharedProject/lot_service/pkg/logging"
 	"github.com/levelord1311/backendForSharedProject/lot_service/pkg/metric"
 	"github.com/levelord1311/backendForSharedProject/lot_service/pkg/mysql"
@@ -48,7 +48,7 @@ func main() {
 	}
 
 	lotStorage := db.NewStorage(mysqlClient, logger)
-	lotService, err := lot.NewService(lotStorage, logger)
+	lotService, err := service.NewService(lotStorage, logger)
 	if err != nil {
 		logger.Fatalln(err)
 	}

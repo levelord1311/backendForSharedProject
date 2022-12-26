@@ -3,9 +3,9 @@ package auth
 import (
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
+	"github.com/levelord1311/backendForSharedProject/api_service/internal/apperror"
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/client/user_service"
-	"github.com/levelord1311/backendForSharedProject/api_service/pkg/apperror"
-	"github.com/levelord1311/backendForSharedProject/api_service/pkg/jwt"
+	"github.com/levelord1311/backendForSharedProject/api_service/internal/jwt"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/logging"
 	"net/http"
 )
@@ -33,7 +33,7 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) error {
 
 	var dto *user_service.CreateUserDTO
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
-		return apperror.BadRequestError("failed to decode data")
+		return apperror.BadRequestError("failed to decode data", "")
 	}
 
 	u, err := h.UserService.Create(r.Context(), dto)
@@ -63,7 +63,7 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) error {
 		defer r.Body.Close()
 		dto := &user_service.SignInUserDTO{}
 		if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
-			return apperror.BadRequestError("failed to decode data")
+			return apperror.BadRequestError("failed to decode data", "")
 		}
 		u, err := h.UserService.SignIn(r.Context(), dto)
 		if err != nil {

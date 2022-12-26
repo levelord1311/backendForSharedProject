@@ -5,43 +5,42 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19f7c286-4b58-41df-abef-1f7ca6ee8d15" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api_service/app/internal/client/lot_service/model.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api_service/app/internal/client/lot_service/service.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api_service/app/internal/handlers/lots/handler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api_service/migrations/20221109120110_create_lots.down.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lot_service/app/cmd/main/app.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lot_service/app/internal/config/config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lot_service/app/internal/handlers/handler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lot_service/app/internal/lot/db/mysql.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lot_service/app/internal/lot/model.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lot_service/app/internal/lot/service.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lot_service/app/internal/lot/storage.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lot_service/app/pkg/apperror/error.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lot_service/app/pkg/apperror/middleware.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lot_service/app/pkg/logging/logging.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lot_service/app/pkg/metric/handler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lot_service/app/pkg/mysql/client.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lot_service/app/pkg/shutdown/shutdown.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6cb1b0e9-1f17-45e1-b60e-1ca39fce40ac.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/6cb1b0e9-1f17-45e1-b60e-1ca39fce40ac.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api_service/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lot_service/app/pkg/api/sort/middleware.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api_service/app/cmd/main/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/cmd/main/app.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/client/user_service/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/client/user_service/model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/client/user_service/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/client/user_service/service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/config/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/handlers/auth/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/handlers/auth/handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/pkg/jwt/helper.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/pkg/jwt/helper.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/pkg/jwt/middleware.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/pkg/jwt/middleware.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/pkg/rest/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/pkg/rest/client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/migrations/20221109105920_create_users.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/migrations/20221109105920_create_users.up.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/migrations/20221109120110_create_estate_lots.down.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/migrations/20221109120110_create_estate_lots.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/migrations/20221109120110_create_lots.up.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/app/cmd/main/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/app/cmd/main/app.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/apiserver/apiserver.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/apiserver/server.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/apiserver/server_internal_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/model/estateLot.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/model/rawtime.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/model/testing.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/model/user.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/model/validations.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/model_test/user_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/errors.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/repository.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore/estateLotRepository.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore/store.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore/testing.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore/userrepository.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore_test/store_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore_test/userRepository_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/store.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/estatelotrepository.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/estatelotrepository_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/store.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/userrepository.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/userrepository_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/client/lot_service/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/client/lot_service/service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/internal/handlers/lots/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/handlers/lots/handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/app/pkg/jwt/jwt.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lot_service/app/internal/handlers/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/lot_service/app/internal/handlers/handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lot_service/app/internal/lot/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/lot_service/app/internal/lot/service.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user_service/app/internal/handlers/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/app/internal/handlers/handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/app/internal/user/db/mysql.go" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/app/internal/user/db/mysql.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/app/internal/user/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/app/internal/user/model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/app/internal/user/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/app/internal/user/service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/app/pkg/mysql/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/app/pkg/mysql/client.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,12 +60,6 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/api_service/app/cmd/main/app.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/api_service/app/internal/app/apiserver/apiserver.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/api_service/app/internal/app/apiserver/server.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/api_service/app/internal/app/model/user.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/api_service/app/internal/app/store/repository.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore/userrepository.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/api_service/app/pkg/jwt/jwt.go" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -114,11 +107,11 @@
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\pkg" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\lot_service\app\pkg" />
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\api_service\app\internal" />
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject" />
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\api_service" />
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\app" />
-      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\pkg" />
     </key>
   </component>
   <component name="RunManager" selected="Database Script.20221109120110_create_lots.up.sql">

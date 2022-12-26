@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/levelord1311/backendForSharedProject/api_service/pkg/apperror"
+	"github.com/levelord1311/backendForSharedProject/api_service/internal/apperror"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/logging"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/rest"
 	"net/http"
@@ -37,6 +37,7 @@ func NewService(baseURL string, resource string, logger logging.Logger) *client 
 type LotService interface {
 	GetByUserID(ctx context.Context, id string) ([]byte, error)
 	GetByLotID(ctx context.Context, id string) ([]byte, error)
+	GetWithFilter(ctx context.Context, rQuery string) ([]byte, error)
 	Create(ctx context.Context, dto *CreateLotDTO) (uint, error)
 	Update(ctx context.Context, dto *UpdateLotDTO) error
 	Delete(ctx context.Context, lotID, userID string) error
@@ -112,6 +113,48 @@ func (c *client) GetByLotID(ctx context.Context, id string) ([]byte, error) {
 		return nil, fmt.Errorf("failed to read body")
 	}
 	return lot, nil
+}
+
+func (c *client) GetWithFilter(ctx context.Context, rQuery string) ([]byte, error) {
+
+	c.base.Logger.Debug("build url with resource and raw query")
+	c.base.Logger.Debug("c.RESOURCE:", c.Resource)
+	c.base.Logger.Debug("rQuery:", rQuery)
+
+	//uri, err := c.base.BuildURL(fmt.Sprintf("%s?%s", c.Resource, rQuery), nil)
+	uri, err := c.base.BuildURL(c.Resource, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to build URL. error: %v", err)
+	}
+	uri = fmt.Sprintf("%s?%s", uri, rQuery)
+	c.base.Logger.Tracef("url: %s", uri)
+
+	c.base.Logger.Debug("creating new request..")
+	req, err := http.NewRequest(http.MethodGet, uri, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create new request due to error: %w", err)
+	}
+
+	c.base.Logger.Debug("sending request..")
+	reqCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+	req = req.WithContext(reqCtx)
+	response, err := c.base.SendRequest(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to send request due to error: %w", err)
+	}
+
+	if !response.IsOk {
+		return nil, apperror.APIError(response.Error.ErrorCode, response.Error.Message, response.Error.DeveloperMessage)
+	}
+
+	c.base.Logger.Debug("reading response body..")
+	lots, err := response.ReadBody()
+	if err != nil {
+		return nil, fmt.Errorf("failed to read body")
+	}
+
+	return lots, nil
 }
 
 func (c *client) Create(ctx context.Context, dto *CreateLotDTO) (uint, error) {

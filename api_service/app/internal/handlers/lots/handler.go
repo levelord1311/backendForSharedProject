@@ -4,18 +4,20 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
+	"github.com/levelord1311/backendForSharedProject/api_service/internal/apperror"
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/client/lot_service"
-	"github.com/levelord1311/backendForSharedProject/api_service/pkg/apperror"
-	"github.com/levelord1311/backendForSharedProject/api_service/pkg/jwt"
+	"github.com/levelord1311/backendForSharedProject/api_service/internal/jwt"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/logging"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 const (
-	lotsURL      = "/api/lots"
+	lotsURL      = "/api/lots/"
 	lotsOfUser   = "/api/lots/user/:id"
 	singleLotURL = "/api/lots/lot/:id"
+	weekURL      = "/api/lots/week"
 )
 
 type Handler struct {
@@ -24,11 +26,29 @@ type Handler struct {
 }
 
 func (h *Handler) Register(router *httprouter.Router) {
-	router.HandlerFunc(http.MethodGet, singleLotURL, apperror.Middleware(h.GetByLotID))
 	router.HandlerFunc(http.MethodGet, lotsOfUser, apperror.Middleware(h.GetByUserID))
+	router.HandlerFunc(http.MethodGet, lotsURL, apperror.Middleware(h.GetLots))
 	router.HandlerFunc(http.MethodPost, lotsURL, jwt.Middleware(apperror.Middleware(h.CreateLot)))
+	router.HandlerFunc(http.MethodGet, singleLotURL, apperror.Middleware(h.GetByLotID))
 	router.HandlerFunc(http.MethodPatch, singleLotURL, jwt.Middleware(apperror.Middleware(h.UpdateLot)))
 	router.HandlerFunc(http.MethodDelete, singleLotURL, jwt.Middleware(apperror.Middleware(h.DeleteLot)))
+	router.HandlerFunc(http.MethodGet, weekURL, apperror.Middleware(h.GetLastWeek))
+}
+
+func (h *Handler) GetLots(w http.ResponseWriter, r *http.Request) error {
+	w.Header().Set("Content-Type", "application/json")
+
+	h.Logger.Info("getting raw query from url..")
+	rQuery := r.URL.RawQuery
+	lots, err := h.LotService.GetWithFilter(r.Context(), rQuery)
+	if err != nil {
+		return err
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(lots)
+
+	return nil
 }
 
 func (h *Handler) GetByLotID(w http.ResponseWriter, r *http.Request) error {
@@ -84,7 +104,7 @@ func (h *Handler) CreateLot(w http.ResponseWriter, r *http.Request) error {
 	defer r.Body.Close()
 	dto := &lot_service.CreateLotDTO{}
 	if err := json.NewDecoder(r.Body).Decode(dto); err != nil {
-		return apperror.BadRequestError("failed to decode data")
+		return apperror.BadRequestError("failed to decode data", "")
 	}
 
 	h.Logger.Info("getting user_id from req.context()..")
@@ -115,7 +135,7 @@ func (h *Handler) UpdateLot(w http.ResponseWriter, r *http.Request) error {
 	h.Logger.Info("getting lot_id from query..")
 	lotIDStr := r.URL.Query().Get("lot_id")
 	if lotIDStr == "" {
-		return apperror.BadRequestError("lot_id query parameter is required and must be an unsigned integer")
+		return apperror.BadRequestError("lot_id query parameter is required and must be an unsigned integer", "")
 	}
 
 	lotID, err := strconv.Atoi(lotIDStr)
@@ -127,7 +147,7 @@ func (h *Handler) UpdateLot(w http.ResponseWriter, r *http.Request) error {
 
 	var dto *lot_service.UpdateLotDTO
 	if err = json.NewDecoder(r.Body).Decode(&dto); err != nil {
-		return apperror.BadRequestError("failed to decode data")
+		return apperror.BadRequestError("failed to decode data", "")
 	}
 
 	dto.ID = uint(lotID)
@@ -156,7 +176,7 @@ func (h *Handler) DeleteLot(w http.ResponseWriter, r *http.Request) error {
 	h.Logger.Info("getting lot_id from query..")
 	lotID := r.URL.Query().Get("lot_id")
 	if lotID == "" {
-		return apperror.BadRequestError("lot_id query parameter is required and must be an unsigned integer")
+		return apperror.BadRequestError("lot_id query parameter is required and must be an unsigned integer", "")
 	}
 
 	_, err := strconv.Atoi(lotID)
@@ -178,6 +198,26 @@ func (h *Handler) DeleteLot(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+
+	return nil
+}
+
+func (h *Handler) GetLastWeek(w http.ResponseWriter, r *http.Request) error {
+	w.Header().Set("Content-Type", "application/json")
+
+	h.Logger.Info("calculating date range and building query..")
+	dateAfter := time.Now().AddDate(0, 0, -7).Format("2006-01-02")
+	dateBefore := time.Now().AddDate(0, 0, 1).Format("2006-01-02")
+
+	rQuery := fmt.Sprintf("created_at=%s:%s", dateAfter, dateBefore)
+
+	lots, err := h.LotService.GetWithFilter(r.Context(), rQuery)
+	if err != nil {
+		return err
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(lots)
 
 	return nil
 }

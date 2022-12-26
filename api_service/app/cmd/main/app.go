@@ -9,10 +9,11 @@ import (
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/config"
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/handlers/auth"
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/handlers/lots"
-	"github.com/levelord1311/backendForSharedProject/api_service/pkg/jwt"
+	"github.com/levelord1311/backendForSharedProject/api_service/internal/jwt"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/logging"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/metric"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/shutdown"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"net"
 	"net/http"
 	"os"
@@ -24,7 +25,7 @@ import (
 
 // TODO Makefile
 // TODO swagger
-// TODO отрефакторить из монолита в микросервисы
+// TODO исправить DTO
 // TODO сделать ответы микросервисов доступными только для запросов от api service
 // TODO JWT refresh токены, хотя бы в кеше (попробовать в redis?). Или сгенерить как JWT?
 /*
@@ -46,6 +47,10 @@ func main() {
 	logger.Println("initializing router...")
 	router := httprouter.New()
 
+	logger.Println("initializing swagger docs...")
+	router.Handler(http.MethodGet, "/swagger", http.RedirectHandler("/swagger/index.html", http.StatusMovedPermanently))
+	router.Handler(http.MethodGet, "/swagger/*any", httpSwagger.WrapHandler)
+
 	logger.Println("initializing helpers...")
 	jwtHelper := jwt.NewHelper(logger)
 
@@ -65,10 +70,6 @@ func main() {
 	logger.Println("starting application...")
 	start(router, logger, cfg)
 
-	//if err := main.StartMainHTTP(cfg); err != nil {
-	//	logger.Errorln("error starting http server: ", err)
-	//	os.Exit(2)
-	//}
 }
 
 func start(router *httprouter.Router, logger logging.Logger, cfg *config.Config) {

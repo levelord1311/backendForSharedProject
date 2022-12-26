@@ -7,10 +7,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
+	apperror "github.com/levelord1311/backendForSharedProject/api_service/internal/apperror"
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/client/user_service"
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/config"
-	"github.com/levelord1311/backendForSharedProject/api_service/pkg/apperror"
-	"github.com/levelord1311/backendForSharedProject/api_service/pkg/jwt"
+	"github.com/levelord1311/backendForSharedProject/api_service/internal/jwt"
 	"github.com/levelord1311/backendForSharedProject/api_service/pkg/logging"
 	"io"
 	"net/http"
@@ -57,7 +57,7 @@ func (h *Handler) handleGoogleCallback(w http.ResponseWriter, r *http.Request) e
 	// Read oauthState from Cookie
 	oauthState, _ := r.Cookie("oauthstate")
 	if r.FormValue("state") != oauthState.Value {
-		return apperror.BadRequestError("invalid oauth google state")
+		return apperror.BadRequestError("invalid oauth google state", "")
 	}
 
 	data, err := getUserDataFromGoogle(r.FormValue("code"))
