@@ -51,7 +51,6 @@ func (c *client) SignIn(ctx context.Context, dto *SignInUserDTO) (*User, error) 
 	if err != nil {
 		return nil, fmt.Errorf("failed to build URL. error: %w", err)
 	}
-	c.base.Logger.Tracef("url: %s", uri)
 
 	c.base.Logger.Debug("marshaling dto to bytes...")
 	dataBytes, err := json.Marshal(dto)

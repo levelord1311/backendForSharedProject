@@ -72,10 +72,8 @@ func (l *Lot) ValidateFields() error {
 		validation.Field(&l.CreatedByUserID, validation.Required),
 		validation.Field(&l.TypeOfEstate, validation.Required, validation.In(
 			"квартира",
-			"дом",
-			"студия",
-			"гостинка")),
-		validation.Field(&l.Rooms, validation.Required, validation.Max(6)),
+			"дом")),
+		validation.Field(&l.Rooms, validation.Max(6)),
 		validation.Field(&l.Area, validation.Required),
 		validation.Field(&l.Floor, validation.Required, validation.Max(163)),
 		validation.Field(&l.MaxFloor, validation.Required, validation.Max(163)),

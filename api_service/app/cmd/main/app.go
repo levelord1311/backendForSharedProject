@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
+	_ "github.com/levelord1311/backendForSharedProject/api_service/docs"
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/client/lot_service"
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/client/user_service"
 	"github.com/levelord1311/backendForSharedProject/api_service/internal/config"
@@ -24,8 +25,7 @@ import (
 )
 
 // TODO Makefile
-// TODO swagger
-// TODO исправить DTO
+// TODO исправить DTO (?)
 // TODO сделать ответы микросервисов доступными только для запросов от api service
 // TODO JWT refresh токены, хотя бы в кеше (попробовать в redis?). Или сгенерить как JWT?
 /*
@@ -34,6 +34,17 @@ import (
    Его же точно так же можно сгенерить как jwt и не хранить вообще ничего"
 */
 // TODO тесты
+// TODO https
+
+// @title API Service
+// @version 0.0.1
+// @description API service for frontend service to interact with
+// @host localhost:8080
+// @BasePath /api/
+// @accept json
+// @produce json
+// @query.collection.format multi
+// @schemes http
 
 func main() {
 

@@ -88,12 +88,10 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) error {
 	}
 	defer r.Body.Close()
 
-	h.Logger.Debugf("decoded DTO:%v", signUser)
 	u, err := h.UserService.SignIn(r.Context(), signUser)
 	if err != nil {
 		return err
 	}
-	h.Logger.Debugf("recieved user:%v", u)
 	h.Logger.Debug("marshalling user..")
 	userBytes, err := json.Marshal(&u)
 	if err != nil {

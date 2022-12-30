@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	lotsURL      = "/api/lots/"
+	lotsURL      = "/api/lots"
 	lotsOfUser   = "/api/lots/user/:id"
 	singleLotURL = "/api/lots/lot/:id"
 	weekURL      = "/api/lots/week"
@@ -35,6 +35,25 @@ func (h *Handler) Register(router *httprouter.Router) {
 	router.HandlerFunc(http.MethodGet, weekURL, apperror.Middleware(h.GetLastWeek))
 }
 
+// GetLots godoc
+//
+//	@Summary		Show lots
+//	@Description	Get lots with filter from query.
+//	@Description	Supported comparisons: eq, neq, lt, lte, gt, gte.
+//	@Description	For range use example ?created_by=2022-12-21:2022-12-22
+//	@Tags			lots
+//	@Produce		json
+//	@Param 			estate_type query string false "filter by estate type"
+//	@Param 			rooms query string false "filter by rooms quantity"
+//	@Param 			district query string false "filter by district"
+//	@Param 			price query string false "filter by price"
+//	@Param 			created_at query string false "filter by date of creation"
+//	@Param 			floor query string false "filter by floor"
+//	@Success		200	{object}	lot_service.Lot
+//	@Failure		400	{object}	apperror.AppError
+//	@Failure		404	{object}	apperror.AppError
+//	@Failure		418	{object}	apperror.AppError
+//	@Router			/lots [get]
 func (h *Handler) GetLots(w http.ResponseWriter, r *http.Request) error {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -51,6 +70,18 @@ func (h *Handler) GetLots(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+// GetByLotID godoc
+//
+//	@Summary		Show lot
+//	@Description	get lot by its ID
+//	@Tags			lots
+//	@Produce		json
+//	@Param			id	path		int	true	"Lot ID"
+//	@Success		200	{object}	lot_service.Lot
+//	@Failure		400	{object}	apperror.AppError
+//	@Failure		404	{object}	apperror.AppError
+//	@Failure		418	{object}	apperror.AppError
+//	@Router			/lots/lot/{id} [get]
 func (h *Handler) GetByLotID(w http.ResponseWriter, r *http.Request) error {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -74,10 +105,22 @@ func (h *Handler) GetByLotID(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+// GetByUserID godoc
+//
+//	@Summary		Show lots
+//	@Description	get lots created by user
+//	@Tags			lots
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"User ID"
+//	@Success		200	{array}		lot_service.Lot
+//	@Failure		400	{object}	apperror.AppError
+//	@Failure		404	{object}	apperror.AppError
+//	@Failure		418	{object}	apperror.AppError
+//	@Router			/lots/user/{id} [get]
 func (h *Handler) GetByUserID(w http.ResponseWriter, r *http.Request) error {
 	w.Header().Set("Content-Type", "application/json")
 
-	h.Logger.Info("getting user_id from query..")
 	h.Logger.Info("getting id from context..")
 	params := r.Context().Value(httprouter.ParamsKey).(httprouter.Params)
 	userID := params.ByName("id")
@@ -98,6 +141,20 @@ func (h *Handler) GetByUserID(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+// CreateLot godoc
+//
+//	@Summary		Create lot
+//	@Description	creates lot by user id from JWT
+//	@Tags			lots
+//	@Accept			json
+//	@Produce		json
+//	@Param			Token	header		string	true	"JWT token"
+//	@Success		201
+//	@Header			201 {string} Location "/lots/lot/{created_id}"
+//	@Failure		400	{object}	apperror.AppError
+//	@Failure		404	{object}	apperror.AppError
+//	@Failure		418	{object}	apperror.AppError
+//	@Router			/lots [post]
 func (h *Handler) CreateLot(w http.ResponseWriter, r *http.Request) error {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -125,20 +182,30 @@ func (h *Handler) CreateLot(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	w.Header().Set("Location", fmt.Sprintf("%s/%d", lotsURL, lotID))
+	w.Header().Set("Location", fmt.Sprintf("%s/%d", singleLotURL, lotID))
 	return nil
 }
 
+// UpdateLot godoc
+//
+//	@Summary		Update lot price
+//	@Description	Get lots created during last 7 days.
+//	@Tags			lots
+//	@Accept 		json
+//	@Param			price	body		int	true	"new lot price"
+//	@Success		204
+//	@Failure		400	{object}	apperror.AppError
+//	@Failure		404	{object}	apperror.AppError
+//	@Failure		418	{object}	apperror.AppError
+//	@Router			/lots/lot/{id} [patch]
 func (h *Handler) UpdateLot(w http.ResponseWriter, r *http.Request) error {
 	w.Header().Set("Content-Type", "application/json")
 
-	h.Logger.Info("getting lot_id from query..")
-	lotIDStr := r.URL.Query().Get("lot_id")
-	if lotIDStr == "" {
-		return apperror.BadRequestError("lot_id query parameter is required and must be an unsigned integer", "")
-	}
+	h.Logger.Info("getting id from context..")
+	params := r.Context().Value(httprouter.ParamsKey).(httprouter.Params)
+	ID := params.ByName("id")
 
-	lotID, err := strconv.Atoi(lotIDStr)
+	lotID, err := strconv.Atoi(ID)
 	if err != nil {
 		return err
 	}
@@ -202,6 +269,17 @@ func (h *Handler) DeleteLot(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+// GetLastWeek godoc
+//
+//	@Summary		Show lots
+//	@Description	Get lots created during last 7 days.
+//	@Tags			lots
+//	@Produce		json
+//	@Success		200	{array}		lot_service.Lot
+//	@Failure		400	{object}	apperror.AppError
+//	@Failure		404	{object}	apperror.AppError
+//	@Failure		418	{object}	apperror.AppError
+//	@Router			/lots/week [get]
 func (h *Handler) GetLastWeek(w http.ResponseWriter, r *http.Request) error {
 	w.Header().Set("Content-Type", "application/json")
 

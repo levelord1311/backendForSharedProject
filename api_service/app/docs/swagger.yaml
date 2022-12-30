@@ -1,0 +1,332 @@
+basePath: /api/
+consumes:
+- application/json
+definitions:
+  apperror.AppError:
+    properties:
+      code:
+        type: string
+      developer_message:
+        type: string
+      fields:
+        $ref: '#/definitions/apperror.ErrorFields'
+      message:
+        type: string
+      params:
+        $ref: '#/definitions/apperror.ErrorParams'
+    type: object
+  apperror.ErrorFields:
+    additionalProperties:
+      type: string
+    type: object
+  apperror.ErrorParams:
+    additionalProperties:
+      type: string
+    type: object
+  lot_service.Lot:
+    properties:
+      area:
+        type: integer
+      building:
+        type: string
+      city:
+        type: string
+      created_by_user_id:
+        type: integer
+      createdAt:
+        type: string
+      district:
+        type: string
+      floor:
+        type: integer
+      id:
+        type: integer
+      max_floor:
+        type: integer
+      price:
+        type: integer
+      redactedAt:
+        type: string
+      rooms:
+        type: integer
+      street:
+        type: string
+      type_of_estate:
+        type: string
+    type: object
+  user_service.CreateUserDTO:
+    description: user information for registering in db. All fields are required.
+    properties:
+      email:
+        description: must be formatted as valid email address
+        example: testUser1@mail.com
+        type: string
+      password:
+        description: expected length greater than 6 symbols
+        example: testPassword
+        type: string
+      username:
+        example: testUser1
+        type: string
+    type: object
+  user_service.SignInUserDTO:
+    description: user information for authentication in db. All fields are required.
+    properties:
+      login:
+        description: user's email or username
+        type: string
+      password:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: api service for frontend service to interact with
+  title: api-service
+  version: 0.0.1
+paths:
+  /auth:
+    post:
+      consumes:
+      - application/json
+      description: authenticates user and returns JWT
+      parameters:
+      - description: user data
+        in: body
+        name: DTO
+        required: true
+        schema:
+          $ref: '#/definitions/user_service.SignInUserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "418":
+          description: I'm a teapot
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+      summary: Authenticate user
+      tags:
+      - user
+  /lots:
+    get:
+      description: |-
+        Get lots with filter from query.
+        Supported comparisons: eq, neq, lt, lte, gt, gte.
+        For range use example ?created_by=2022-12-21:2022-12-22
+      parameters:
+      - description: filter by estate type
+        in: query
+        name: estate_type
+        type: string
+      - description: filter by rooms quantity
+        in: query
+        name: rooms
+        type: string
+      - description: filter by district
+        in: query
+        name: district
+        type: string
+      - description: filter by price
+        in: query
+        name: price
+        type: string
+      - description: filter by date of creation
+        in: query
+        name: created_at
+        type: string
+      - description: filter by floor
+        in: query
+        name: floor
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/lot_service.Lot'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "418":
+          description: I'm a teapot
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+      summary: Show lots
+      tags:
+      - lots
+    post:
+      consumes:
+      - application/json
+      description: creates lot by user id from JWT
+      parameters:
+      - description: JWT token
+        in: header
+        name: Token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          headers:
+            Location:
+              description: /lots/lot/{created_id}
+              type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "418":
+          description: I'm a teapot
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+      summary: Create lot
+      tags:
+      - lots
+  /lots/lot/{id}:
+    get:
+      description: get lot by its ID
+      parameters:
+      - description: Lot ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/lot_service.Lot'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "418":
+          description: I'm a teapot
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+      summary: Show lot
+      tags:
+      - lots
+  /lots/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get lots created by user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/lot_service.Lot'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "418":
+          description: I'm a teapot
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+      summary: Show lots
+      tags:
+      - lots
+  /lots/week:
+    get:
+      description: Get lots created during last 7 days.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/lot_service.Lot'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "418":
+          description: I'm a teapot
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+      summary: Show lots
+      tags:
+      - lots
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: Creates User & returns JWT
+      parameters:
+      - description: user data
+        in: body
+        name: DTO
+        required: true
+        schema:
+          $ref: '#/definitions/user_service.CreateUserDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: jwt.token.string
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "418":
+          description: I'm a teapot
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+      summary: Create user
+      tags:
+      - user
+produces:
+- application/json
+schemes:
+- http
+swagger: "2.0"

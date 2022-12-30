@@ -5,42 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19f7c286-4b58-41df-abef-1f7ca6ee8d15" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/api_service/Makefile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lot_service/app/pkg/api/sort/middleware.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api_service/app/cmd/main/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/cmd/main/app.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/apiserver/apiserver.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/apiserver/server.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/apiserver/server_internal_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/model/estateLot.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/model/rawtime.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/model/testing.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/model/user.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/model/validations.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/model_test/user_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/errors.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/repository.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore/estateLotRepository.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore/store.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore/testing.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore/userrepository.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore_test/store_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/sqlstore_test/userRepository_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/store.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/estatelotrepository.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/estatelotrepository_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/store.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/userrepository.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/app/store/teststore/userrepository_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/client/lot_service/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/client/lot_service/service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/internal/handlers/lots/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_service/app/internal/handlers/lots/handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_service/app/pkg/jwt/jwt.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lot_service/app/internal/handlers/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/lot_service/app/internal/handlers/handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lot_service/app/internal/lot/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/lot_service/app/internal/lot/service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/app/internal/handlers/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/app/internal/handlers/handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/migrations/20221109105920_create_users.down.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20221109105920_create_users.down.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/migrations/20221109105920_create_users.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20221109105920_create_users.up.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/migrations/20221109120110_create_lots.down.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20221109120110_create_lots.down.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_service/migrations/20221109120110_create_lots.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20221109120110_create_lots.up.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,34 +41,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.format.on.save.advertiser.fired&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.watchers.conflict.with.on.save.actions.check.performed&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;configurable..is.expanded&quot;: &quot;false&quot;,
-    &quot;configurable.GoLibrariesConfigurable.is.expanded&quot;: &quot;true&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/rmv13/GolandProjects/backendForSharedProject/lot_service&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;goland.project.structure&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultGoTemplateProperty": "Go File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.format.on.save.advertiser.fired": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "RunOnceActivity.go.watchers.conflict.with.on.save.actions.check.performed": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "configurable..is.expanded": "false",
+    "configurable.GoLibrariesConfigurable.is.expanded": "true",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "last_opened_file_path": "C:/Users/rmv13/GolandProjects/backendForSharedProject/api_service",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "goland.project.structure"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ],
-    &quot;RunConfigurationTargetLRU&quot;: [
-      &quot;6cb1b0e9-1f17-45e1-b60e-1ca39fce40ac/schema/\&quot;test_db\&quot;&quot;
+    "RunConfigurationTargetLRU": [
+      "6cb1b0e9-1f17-45e1-b60e-1ca39fce40ac/schema/\"test_db\""
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\api_service\app\pkg" />
@@ -107,9 +78,9 @@
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\pkg" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject" />
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\lot_service\app\pkg" />
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\api_service\app\internal" />
-      <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject" />
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\api_service" />
       <recent name="C:\Users\rmv13\GolandProjects\backendForSharedProject\app" />
     </key>
@@ -149,6 +120,22 @@
       <filePath value="$PROJECT_DIR$" />
       <framework value="gotest" />
       <pattern value="^\QTestServer_HandleEstateLotsCreate\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="SwaggerCodegen">
+      <option name="activeConfigurationType" value="FILE" />
+      <option name="configurationPath" value="" />
+      <option name="customJreEnabled" value="false" />
+      <option name="customTemplatesPath" value="" />
+      <option name="enableDebugLogging" value="false" />
+      <option name="generateToPath" value="C:\Users\rmv13\GolandProjects\backendForSharedProject\gen" />
+      <option name="generationParameters">
+        <list />
+      </option>
+      <option name="generatorPath" value="https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.0.0/openapi-generator-cli-5.0.0.jar" />
+      <option name="jdkPath" value="" />
+      <option name="language" value="java" />
+      <option name="specificationPath" value="C:\Users\rmv13\GolandProjects\backendForSharedProject\api_service\app\docs\swagger.yaml" />
       <method v="2" />
     </configuration>
     <recent_temporary>

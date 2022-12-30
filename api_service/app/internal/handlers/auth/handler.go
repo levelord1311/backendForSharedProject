@@ -26,6 +26,18 @@ func (h *Handler) Register(router *httprouter.Router) {
 	router.HandlerFunc(http.MethodPost, authURL, apperror.Middleware(h.SignIn))
 }
 
+// SignUp godoc
+//
+//	@Summary Create user
+//	@Description Creates User & returns JWT
+//	@Tags user
+//	@Accept json
+//	@Param DTO body user_service.CreateUserDTO true "user data"
+//	@Produce json
+//	@Success 201 {string} string "jwt.token.string"
+//	@Failure 400 {object}	apperror.AppError
+//	@Failure 418 {object}	apperror.AppError
+//	@Router /signup [post]
 func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) error {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -51,17 +63,28 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+// SignIn godoc
+//
+//	@Summary Authenticate user
+//	@Description authenticates user and returns JWT
+//	@Tags user
+//	@Accept json
+//	@Param DTO body user_service.SignInUserDTO true "user data"
+//	@Produce json
+//	@Success 200 {string} jwt.token.string
+//	@Failure 400 {object}	apperror.AppError
+//	@Failure 418 {object}	apperror.AppError
+//	@Router /auth [post]
 func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) error {
 
 	var token []byte
-	//var err error
 
 	w.Header().Set("Content-Type", "application/json")
 
 	switch r.Method {
 	case http.MethodPost:
 		defer r.Body.Close()
-		dto := &user_service.SignInUserDTO{}
+		var dto *user_service.SignInUserDTO
 		if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
 			return apperror.BadRequestError("failed to decode data", "")
 		}
@@ -86,7 +109,7 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) error {
 		//	}
 	}
 
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
 	w.Write(token)
 
 	return nil

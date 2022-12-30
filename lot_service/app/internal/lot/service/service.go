@@ -99,9 +99,6 @@ func (s *service) GetLotsWithFilter(ctx context.Context, query url.Values) ([]*l
 
 	fo := getFiltersFromQuery(query)
 
-	s.logger.Debugf("GOT FILTER OPTIONS: %v", fo)
-	s.logger.Debugf("GOT SORTING OPTIONS: %v", so)
-
 	options := storage.NewOptions(so, fo)
 	s.logger.Debugf("GOT OPTIONS FOR DB: %v", options)
 
