@@ -192,6 +192,7 @@ func (h *Handler) CreateLot(w http.ResponseWriter, r *http.Request) error {
 //	@Description	Get lots created during last 7 days.
 //	@Tags			lots
 //	@Accept 		json
+//	@Param			id	path		int	true	"Lot ID"
 //	@Param			price	body		int	true	"new lot price"
 //	@Success		204
 //	@Failure		400	{object}	apperror.AppError

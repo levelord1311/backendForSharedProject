@@ -252,6 +252,13 @@ const docTemplate = `{
                 "summary": "Update lot price",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "Lot ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "new lot price",
                         "name": "price",
                         "in": "body",

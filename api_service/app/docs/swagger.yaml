@@ -238,6 +238,11 @@ paths:
       - application/json
       description: Get lots created during last 7 days.
       parameters:
+      - description: Lot ID
+        in: path
+        name: id
+        required: true
+        type: integer
       - description: new lot price
         in: body
         name: price

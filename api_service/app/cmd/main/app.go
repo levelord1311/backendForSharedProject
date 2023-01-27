@@ -24,8 +24,9 @@ import (
 	"time"
 )
 
+// TODO переделать apperror, ответы на реквесты в случае ошибок неадекватны
+// TODO исправить инициализацию и graceful shutdown без потери данных
 // TODO исправить DTO (?)
-// TODO исправить apperror
 // TODO сделать ответы микросервисов доступными только для запросов от api service
 // TODO JWT refresh токены, хотя бы в кеше (попробовать в redis?). Или сгенерить как JWT?
 /*
@@ -48,7 +49,6 @@ import (
 
 func main() {
 
-	// TODO "Пионерский код. Логер без закрытия в defer c потерей данных логирования" - проверить, исправить
 	logger := logging.GetLogger()
 	logger.Println("logger initialized")
 
