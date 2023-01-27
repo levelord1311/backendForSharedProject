@@ -24,8 +24,8 @@ import (
 	"time"
 )
 
-// TODO Makefile
 // TODO исправить DTO (?)
+// TODO исправить apperror
 // TODO сделать ответы микросервисов доступными только для запросов от api service
 // TODO JWT refresh токены, хотя бы в кеше (попробовать в redis?). Или сгенерить как JWT?
 /*

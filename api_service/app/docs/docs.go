@@ -154,7 +154,7 @@ const docTemplate = `{
                 "tags": [
                     "lots"
                 ],
-                "summary": "Create lot",
+                "summary": "Create new lot",
                 "parameters": [
                     {
                         "type": "string",
@@ -204,7 +204,7 @@ const docTemplate = `{
                 "tags": [
                     "lots"
                 ],
-                "summary": "Show lot",
+                "summary": "Show lot by ID",
                 "parameters": [
                     {
                         "type": "integer",
@@ -240,6 +240,50 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "description": "Get lots created during last 7 days.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "lots"
+                ],
+                "summary": "Update lot price",
+                "parameters": [
+                    {
+                        "description": "new lot price",
+                        "name": "price",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "418": {
+                        "description": "I'm a teapot",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    }
+                }
             }
         },
         "/lots/user/{id}": {
@@ -254,7 +298,7 @@ const docTemplate = `{
                 "tags": [
                     "lots"
                 ],
-                "summary": "Show lots",
+                "summary": "Show lots by user",
                 "parameters": [
                     {
                         "type": "integer",
@@ -304,7 +348,7 @@ const docTemplate = `{
                 "tags": [
                     "lots"
                 ],
-                "summary": "Show lots",
+                "summary": "Show lots created during last 7 days.",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -505,8 +549,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/api/",
 	Schemes:          []string{"http"},
-	Title:            "api-service",
-	Description:      "api service for frontend service to interact with",
+	Title:            "API Service",
+	Description:      "API service for frontend service to interact with",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

@@ -72,7 +72,7 @@ func (h *Handler) GetLots(w http.ResponseWriter, r *http.Request) error {
 
 // GetByLotID godoc
 //
-//	@Summary		Show lot
+//	@Summary		Show lot by ID
 //	@Description	get lot by its ID
 //	@Tags			lots
 //	@Produce		json
@@ -107,7 +107,7 @@ func (h *Handler) GetByLotID(w http.ResponseWriter, r *http.Request) error {
 
 // GetByUserID godoc
 //
-//	@Summary		Show lots
+//	@Summary		Show lots by user
 //	@Description	get lots created by user
 //	@Tags			lots
 //	@Accept			json
@@ -143,7 +143,7 @@ func (h *Handler) GetByUserID(w http.ResponseWriter, r *http.Request) error {
 
 // CreateLot godoc
 //
-//	@Summary		Create lot
+//	@Summary		Create new lot
 //	@Description	creates lot by user id from JWT
 //	@Tags			lots
 //	@Accept			json
@@ -271,7 +271,7 @@ func (h *Handler) DeleteLot(w http.ResponseWriter, r *http.Request) error {
 
 // GetLastWeek godoc
 //
-//	@Summary		Show lots
+//	@Summary		Show lots created during last 7 days.
 //	@Description	Get lots created during last 7 days.
 //	@Tags			lots
 //	@Produce		json

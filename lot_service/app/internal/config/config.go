@@ -12,7 +12,7 @@ type Config struct {
 		Type   string `yaml:"type" env-default:"port"`
 		BindIP string `yaml:"bind_ip" env-default:"localhost"`
 		Port   string `yaml:"port" env-default:"8082"`
-	}
+	} `yaml:"listen"`
 
 	MysqlDB struct {
 		Host     string `yaml:"host" env-default:"0.0.0.0"`
@@ -20,7 +20,7 @@ type Config struct {
 		Username string `yaml:"username" env-default:"testDB"`
 		Password string `yaml:"password" env-default:"testPassword"`
 		DBName   string `yaml:"db_name" env-default:"test_db"`
-	}
+	} `yaml:"MysqlDB"`
 }
 
 var instance *Config

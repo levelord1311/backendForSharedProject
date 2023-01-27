@@ -10,8 +10,8 @@
     ],
     "swagger": "2.0",
     "info": {
-        "description": "api service for frontend service to interact with",
-        "title": "api-service",
+        "description": "API service for frontend service to interact with",
+        "title": "API Service",
         "contact": {},
         "version": "0.0.1"
     },
@@ -150,7 +150,7 @@
                 "tags": [
                     "lots"
                 ],
-                "summary": "Create lot",
+                "summary": "Create new lot",
                 "parameters": [
                     {
                         "type": "string",
@@ -200,7 +200,7 @@
                 "tags": [
                     "lots"
                 ],
-                "summary": "Show lot",
+                "summary": "Show lot by ID",
                 "parameters": [
                     {
                         "type": "integer",
@@ -236,6 +236,50 @@
                         }
                     }
                 }
+            },
+            "patch": {
+                "description": "Get lots created during last 7 days.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "lots"
+                ],
+                "summary": "Update lot price",
+                "parameters": [
+                    {
+                        "description": "new lot price",
+                        "name": "price",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "418": {
+                        "description": "I'm a teapot",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    }
+                }
             }
         },
         "/lots/user/{id}": {
@@ -250,7 +294,7 @@
                 "tags": [
                     "lots"
                 ],
-                "summary": "Show lots",
+                "summary": "Show lots by user",
                 "parameters": [
                     {
                         "type": "integer",
@@ -300,7 +344,7 @@
                 "tags": [
                     "lots"
                 ],
-                "summary": "Show lots",
+                "summary": "Show lots created during last 7 days.",
                 "responses": {
                     "200": {
                         "description": "OK",

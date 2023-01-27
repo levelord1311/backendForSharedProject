@@ -81,8 +81,8 @@ definitions:
 host: localhost:8080
 info:
   contact: {}
-  description: api service for frontend service to interact with
-  title: api-service
+  description: API service for frontend service to interact with
+  title: API Service
   version: 0.0.1
 paths:
   /auth:
@@ -199,7 +199,7 @@ paths:
           description: I'm a teapot
           schema:
             $ref: '#/definitions/apperror.AppError'
-      summary: Create lot
+      summary: Create new lot
       tags:
       - lots
   /lots/lot/{id}:
@@ -230,7 +230,36 @@ paths:
           description: I'm a teapot
           schema:
             $ref: '#/definitions/apperror.AppError'
-      summary: Show lot
+      summary: Show lot by ID
+      tags:
+      - lots
+    patch:
+      consumes:
+      - application/json
+      description: Get lots created during last 7 days.
+      parameters:
+      - description: new lot price
+        in: body
+        name: price
+        required: true
+        schema:
+          type: integer
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "418":
+          description: I'm a teapot
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+      summary: Update lot price
       tags:
       - lots
   /lots/user/{id}:
@@ -265,7 +294,7 @@ paths:
           description: I'm a teapot
           schema:
             $ref: '#/definitions/apperror.AppError'
-      summary: Show lots
+      summary: Show lots by user
       tags:
       - lots
   /lots/week:
@@ -292,7 +321,7 @@ paths:
           description: I'm a teapot
           schema:
             $ref: '#/definitions/apperror.AppError'
-      summary: Show lots
+      summary: Show lots created during last 7 days.
       tags:
       - lots
   /signup:
