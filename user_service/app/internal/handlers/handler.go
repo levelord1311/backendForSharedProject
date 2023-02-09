@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/levelord1311/backendForSharedProject/user_service/internal/apperror"
 	"github.com/levelord1311/backendForSharedProject/user_service/internal/models"
@@ -18,7 +19,7 @@ const (
 
 type Service interface {
 	GetByID(ctx context.Context, id int) (*models.User, error)
-	//Create(ctx context.Context, dto *models.CreateUserDTO) (uint, error)
+	Create(ctx context.Context, dto *models.CreateUserDTO) (uint, error)
 	//SignIn(ctx context.Context, dto *models.SignInUserDTO) (*models.User, error)
 	//UpdatePassword(ctx context.Context, dto *models.UpdateUserDTO) error
 	//Delete(ctx context.Context, id string) error
@@ -36,8 +37,8 @@ func NewHandler(service Service) *handler {
 
 func (h *handler) Register(router *httprouter.Router) {
 	router.HandlerFunc(http.MethodGet, singleUserURL, h.GetUser)
+	router.HandlerFunc(http.MethodPost, usersURL, h.CreateUser)
 	//router.HandlerFunc(http.MethodPost, authURL, h.SignIn)
-	//router.HandlerFunc(http.MethodPost, usersURL, h.CreateUser)
 	//router.HandlerFunc(http.MethodPatch, singleUserURL, h.PartiallyUpdateUser)
 	//router.HandlerFunc(http.MethodDelete, singleUserURL, h.DeleteUser)
 }
@@ -63,7 +64,7 @@ func (h *handler) GetUser(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(err.Error()))
 			return
 		default:
-			w.WriteHeader(http.StatusTeapot)
+			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(apperror.ErrUnpredictedInternal))
 			return
 		}
@@ -71,7 +72,7 @@ func (h *handler) GetUser(w http.ResponseWriter, r *http.Request) {
 
 	userBytes, err := json.Marshal(user)
 	if err != nil {
-		w.WriteHeader(http.StatusTeapot)
+		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("something wrong with the server"))
 		return
 	}
@@ -80,28 +81,34 @@ func (h *handler) GetUser(w http.ResponseWriter, r *http.Request) {
 	w.Write(userBytes)
 }
 
-//func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
-//	h.Logger.Info("CREATE USER")
-//	w.Header().Set("Content-Type", "application/json")
-//
-//	h.Logger.Debug("decoding data to create user dto..")
-//	var crUser *models.CreateUserDTO
-//
-//	if err := json.NewDecoder(r.Body).Decode(&crUser); err != nil {
-//		return apperror.BadRequestError("invalid JSON scheme. check swagger API")
-//	}
-//	defer r.Body.Close()
-//
-//	userID, err := h.service.Create(r.Context(), crUser)
-//	if err != nil {
-//		return err
-//	}
-//	w.Header().Set("Location", fmt.Sprintf("%s/%d", usersURL, userID))
-//	w.WriteHeader(http.StatusCreated)
-//
-//	return nil
-//}
-//
+func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	//decoding data to create user dto
+	var crUser *models.CreateUserDTO
+	defer r.Body.Close()
+	if err := json.NewDecoder(r.Body).Decode(&crUser); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(apperror.ErrInvalidJSONScheme))
+		return
+	}
+
+	if err := crUser.ValidateFields(); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(apperror.ErrAllFieldsMustBeFilled))
+		return
+	}
+
+	userID, err := h.service.Create(r.Context(), crUser)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(apperror.ErrUnpredictedInternal))
+		return
+	}
+	w.Header().Set("Location", fmt.Sprintf("%s/%d", usersURL, userID))
+	w.WriteHeader(http.StatusCreated)
+}
+
 //func (h *handler) SignIn(w http.ResponseWriter, r *http.Request) {
 //	h.Logger.Info("SIGN IN USER WITH LOGIN AND PASSWORD")
 //	w.Header().Set("Content-Type", "application/json")

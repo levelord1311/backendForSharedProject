@@ -54,7 +54,7 @@ func main() {
 	}
 
 	logger.Println("initializing handlers..")
-	handler := handlers.NewHandler(logger, userService)
+	handler := handlers.NewHandler(userService)
 	handler.Register(router)
 
 	logger.Println("starting application...")
