@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/levelord1311/backendForSharedProject/user_service/internal/models"
 	"github.com/levelord1311/backendForSharedProject/user_service/internal/user"
 	"github.com/levelord1311/backendForSharedProject/user_service/pkg/apperror"
 	"github.com/levelord1311/backendForSharedProject/user_service/pkg/logging"
@@ -31,7 +32,7 @@ func (t *rawTime) time() (time.Time, error) {
 	return time.Parse("2006-01-02 15:04:05", string(*t))
 }
 
-func (s *db) Create(ctx context.Context, u *user.User) (uint, error) {
+func (s *db) Create(ctx context.Context, u *models.User) (uint, error) {
 
 	queryString := `
 	INSERT INTO users (username, email, encrypted_password)
@@ -55,8 +56,8 @@ func (s *db) Create(ctx context.Context, u *user.User) (uint, error) {
 	return uint(retID), nil
 }
 
-func (s *db) FindByEmail(ctx context.Context, email string) (*user.User, error) {
-	u := &user.User{}
+func (s *db) FindByEmail(ctx context.Context, email string) (*models.User, error) {
+	u := &models.User{}
 	var createdAt, redactedAt *rawTime
 
 	queryString := `
@@ -97,8 +98,8 @@ func (s *db) FindByEmail(ctx context.Context, email string) (*user.User, error) 
 	return u, nil
 }
 
-func (s *db) FindByUsername(ctx context.Context, username string) (*user.User, error) {
-	u := &user.User{}
+func (s *db) FindByUsername(ctx context.Context, username string) (*models.User, error) {
+	u := &models.User{}
 	var createdAt, redactedAt *rawTime
 
 	queryString := `
@@ -139,9 +140,9 @@ func (s *db) FindByUsername(ctx context.Context, username string) (*user.User, e
 	return u, nil
 }
 
-func (s *db) FindByID(ctx context.Context, id uint) (*user.User, error) {
+func (s *db) FindByID(ctx context.Context, id uint) (*models.User, error) {
 
-	u := &user.User{}
+	u := &models.User{}
 	var createdAt, redactedAt *rawTime
 
 	queryString := `
@@ -182,7 +183,7 @@ func (s *db) FindByID(ctx context.Context, id uint) (*user.User, error) {
 	return u, nil
 }
 
-func (s *db) Update(ctx context.Context, user *user.User) error {
+func (s *db) Update(ctx context.Context, user *models.User) error {
 	queryString := `
 	UPDATE users
 	SET encrypted_password=?
