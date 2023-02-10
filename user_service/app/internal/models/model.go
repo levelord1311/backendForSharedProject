@@ -113,6 +113,13 @@ func (dto *CreateUserDTO) ValidateFields() error {
 	)
 }
 
+func (dto *SignInUserDTO) ValidateFields() error {
+	return validation.ValidateStruct(dto,
+		validation.Field(&dto.Login, validation.Required),
+		validation.Field(&dto.Password, validation.Required),
+	)
+}
+
 func (dto *UpdateUserDTO) ValidateFields() error {
 	return validation.ValidateStruct(dto,
 		validation.Field(&dto.OldPassword, validation.Required),

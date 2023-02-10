@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	validation "github.com/go-ozzo/ozzo-validation"
+	"github.com/go-ozzo/ozzo-validation/is"
 	"github.com/levelord1311/backendForSharedProject/user_service/internal/apperror"
 	"github.com/levelord1311/backendForSharedProject/user_service/internal/models"
 	"github.com/levelord1311/backendForSharedProject/user_service/pkg/logging"
@@ -56,28 +58,27 @@ func (s *service) Create(ctx context.Context, dto *models.CreateUserDTO) (uint, 
 
 }
 
-//
-//func (s *service) SignIn(ctx context.Context, dto *models.SignInUserDTO) (*models.User, error) {
-//	var u *models.User
-//	var err error
-//	if validation.Validate(dto.Login, is.Email) == nil {
-//		s.logger.Debug("received email as login, using FindByEmail method..")
-//		u, err = s.storage.FindByEmail(ctx, dto.Login)
-//	} else {
-//		s.logger.Debug("received username as login, using FindByUsername method..")
-//		u, err = s.storage.FindByUsername(ctx, dto.Login)
-//	}
-//	if err != nil {
-//		return nil, apperror.UnauthorizedError(err.Error())
-//	}
-//	if !u.ComparePassword(dto.Password) {
-//		return nil, errors.New("wrong login and/or password")
-//	}
-//
-//	return u, nil
-//
-//}
-//
+func (s *service) SignIn(ctx context.Context, dto *models.SignInUserDTO) (*models.User, error) {
+	var u *models.User
+	var err error
+	if validation.Validate(dto.Login, is.Email) == nil {
+		s.logger.Debug("received email as login, using FindByEmail method..")
+		u, err = s.storage.FindByEmail(ctx, dto.Login)
+	} else {
+		s.logger.Debug("received username as login, using FindByUsername method..")
+		u, err = s.storage.FindByUsername(ctx, dto.Login)
+	}
+	if err != nil {
+		return nil, err
+	}
+	if !u.ComparePassword(dto.Password) {
+		return nil, errors.New("wrong login and/or password")
+	}
+
+	return u, nil
+
+}
+
 //func (s *service) UpdatePassword(ctx context.Context, dto *models.UpdateUserDTO) error {
 //
 //	s.logger.Debug("validating DTO fields..")

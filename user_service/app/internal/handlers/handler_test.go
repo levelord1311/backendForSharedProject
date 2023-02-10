@@ -49,11 +49,16 @@ func (s *stubService) Create(ctx context.Context, dto *models.CreateUserDTO) (ui
 	return exampleUserReturn.ID, nil
 }
 
+func (s *stubService) SignIn(ctx context.Context, dto *models.SignInUserDTO) (*models.User, error) {
+	if s.err != nil {
+		return nil, s.err
+	}
+	return exampleUserReturn, nil
+}
+
 func TestHandler_GetUser(t *testing.T) {
-	t.Parallel()
 
-	h := NewHandler(&stubService{})
-
+	h := NewHandler(nil)
 	router := httprouter.New()
 	router.HandlerFunc(http.MethodGet, singleUserURL, h.GetUser)
 
@@ -101,9 +106,7 @@ func TestHandler_GetUser(t *testing.T) {
 	for _, test := range cases {
 		t.Run(test.name, func(t *testing.T) {
 
-			h.service = &stubService{
-				err: test.err,
-			}
+			h.service = &stubService{err: test.err}
 
 			url := fmt.Sprintf("%s/%s", usersURL, test.idParam)
 			w := httptest.NewRecorder()
@@ -132,8 +135,10 @@ func TestHandler_GetUser(t *testing.T) {
 			case http.StatusNotFound:
 				assert.Equal(t, expectedModel, receivedUser)
 			default:
-				err := json.Unmarshal(body, receivedUser)
-				assert.NoError(t, err)
+				err = json.Unmarshal(body, receivedUser)
+				if err != nil {
+					t.Fatal(err)
+				}
 				assert.Equal(t, exampleUserReturn, receivedUser)
 			}
 
@@ -142,8 +147,6 @@ func TestHandler_GetUser(t *testing.T) {
 }
 
 func TestHandler_CreateUser(t *testing.T) {
-
-	h := NewHandler(&stubService{})
 
 	cases := []struct {
 		name           string
@@ -224,9 +227,8 @@ func TestHandler_CreateUser(t *testing.T) {
 	for _, test := range cases {
 		t.Run(test.name, func(t *testing.T) {
 
-			h.service = &stubService{
-				err: test.err,
-			}
+			s := &stubService{err: test.err}
+			h := NewHandler(s)
 
 			dataBytes, err := json.Marshal(test.requestBody)
 			if err != nil {
@@ -254,6 +256,114 @@ func TestHandler_CreateUser(t *testing.T) {
 				assert.Equal(t, test.err.Error(), string(body))
 				return
 			}
+
+			// TODO нет асссерта на хеадер
+
+		})
+	}
+
+}
+
+func TestHandler_SignIn(t *testing.T) {
+
+	cases := []struct {
+		name           string
+		requestBody    any
+		wantStatusCode int
+		err            error
+	}{
+		{
+			name: "successful login",
+			requestBody: &models.SignInUserDTO{
+				Login:    "someLogin",
+				Password: "somePassword",
+			},
+			wantStatusCode: http.StatusOK,
+			err:            nil,
+		},
+		{
+			name: "another successful login",
+			requestBody: &models.SignInUserDTO{
+				Login:    "otherLogin",
+				Password: "otherPassword",
+			},
+			wantStatusCode: http.StatusOK,
+			err:            nil,
+		},
+		{
+			name: "empty field: login",
+			requestBody: &models.SignInUserDTO{
+				Login:    "",
+				Password: "somePassword",
+			},
+			wantStatusCode: http.StatusBadRequest,
+			err:            apperror.ErrAllFieldsMustBeFilled,
+		},
+		{
+			name: "empty field: password",
+			requestBody: &models.SignInUserDTO{
+				Login:    "someLogin",
+				Password: "",
+			},
+			wantStatusCode: http.StatusBadRequest,
+			err:            apperror.ErrAllFieldsMustBeFilled,
+		},
+		{
+			name:           "wrong data",
+			requestBody:    "some data",
+			wantStatusCode: http.StatusBadRequest,
+			err:            apperror.ErrInvalidJSONScheme,
+		},
+		{
+			name: "unexpected server error",
+			requestBody: &models.SignInUserDTO{
+				Login:    "someLogin",
+				Password: "somePassword",
+			},
+			wantStatusCode: http.StatusInternalServerError,
+			err:            apperror.ErrUnpredictedInternal,
+		},
+	}
+
+	for _, test := range cases {
+		t.Run(test.name, func(t *testing.T) {
+
+			s := &stubService{err: test.err}
+			h := NewHandler(s)
+
+			rBody, err := json.Marshal(test.requestBody)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			w := httptest.NewRecorder()
+			req, err := http.NewRequest(http.MethodPost, authURL, bytes.NewBuffer(rBody))
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			h.SignIn(w, req)
+
+			response := w.Result()
+			defer response.Body.Close()
+			body, err := io.ReadAll(response.Body)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			assert.Equal(t, test.wantStatusCode, response.StatusCode)
+
+			if test.err != nil {
+				assert.Equal(t, test.err.Error(), string(body))
+				return
+			}
+
+			receivedUser := &models.User{}
+			err = json.Unmarshal(body, receivedUser)
+			if err != nil {
+				t.Fatal(err)
+			}
+			assert.Equal(t, exampleUserReturn, receivedUser)
 
 		})
 	}

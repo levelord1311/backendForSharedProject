@@ -12,15 +12,15 @@ import (
 )
 
 const (
-	authURL       = "/api/users/auth"
 	usersURL      = "/api/users"
 	singleUserURL = "/api/users/:id"
+	authURL       = "/api/users/auth"
 )
 
 type Service interface {
 	GetByID(ctx context.Context, id int) (*models.User, error)
 	Create(ctx context.Context, dto *models.CreateUserDTO) (uint, error)
-	//SignIn(ctx context.Context, dto *models.SignInUserDTO) (*models.User, error)
+	SignIn(ctx context.Context, dto *models.SignInUserDTO) (*models.User, error)
 	//UpdatePassword(ctx context.Context, dto *models.UpdateUserDTO) error
 	//Delete(ctx context.Context, id string) error
 }
@@ -38,7 +38,7 @@ func NewHandler(service Service) *handler {
 func (h *handler) Register(router *httprouter.Router) {
 	router.HandlerFunc(http.MethodGet, singleUserURL, h.GetUser)
 	router.HandlerFunc(http.MethodPost, usersURL, h.CreateUser)
-	//router.HandlerFunc(http.MethodPost, authURL, h.SignIn)
+	router.HandlerFunc(http.MethodPost, authURL, h.SignIn)
 	//router.HandlerFunc(http.MethodPatch, singleUserURL, h.PartiallyUpdateUser)
 	//router.HandlerFunc(http.MethodDelete, singleUserURL, h.DeleteUser)
 }
@@ -73,7 +73,7 @@ func (h *handler) GetUser(w http.ResponseWriter, r *http.Request) {
 	userBytes, err := json.Marshal(user)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("something wrong with the server"))
+		w.Write([]byte(apperror.ErrUnpredictedInternal))
 		return
 	}
 
@@ -109,34 +109,42 @@ func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-//func (h *handler) SignIn(w http.ResponseWriter, r *http.Request) {
-//	h.Logger.Info("SIGN IN USER WITH LOGIN AND PASSWORD")
-//	w.Header().Set("Content-Type", "application/json")
-//
-//	h.Logger.Debug("decoding data to create user dto..")
-//	var signUser *models.SignInUserDTO
-//
-//	if err := json.NewDecoder(r.Body).Decode(&signUser); err != nil {
-//		return apperror.BadRequestError("invalid JSON scheme. check swagger API")
-//	}
-//	defer r.Body.Close()
-//
-//	u, err := h.service.SignIn(r.Context(), signUser)
-//	if err != nil {
-//		return err
-//	}
-//	h.Logger.Debug("marshalling user..")
-//	userBytes, err := json.Marshal(&u)
-//	if err != nil {
-//		return err
-//	}
-//
-//	w.WriteHeader(http.StatusOK)
-//	w.Write(userBytes)
-//
-//	return nil
-//}
-//
+func (h *handler) SignIn(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var dto *models.SignInUserDTO
+
+	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(apperror.ErrInvalidJSONScheme))
+		return
+	}
+	defer r.Body.Close()
+
+	if err := dto.ValidateFields(); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(apperror.ErrAllFieldsMustBeFilled))
+		return
+	}
+
+	user, err := h.service.SignIn(r.Context(), dto)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(apperror.ErrUnpredictedInternal))
+		return
+	}
+	userBytes, err := json.Marshal(user)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(apperror.ErrUnpredictedInternal))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(userBytes)
+
+}
+
 //func (h *handler) PartiallyUpdateUser(w http.ResponseWriter, r *http.Request) {
 //	h.Logger.Info("PARTIALLY UPDATE USER")
 //	w.Header().Set("Content-Type", "application/json")
