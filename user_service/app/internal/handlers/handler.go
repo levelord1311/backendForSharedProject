@@ -51,8 +51,7 @@ func (h *handler) GetUser(w http.ResponseWriter, r *http.Request) {
 
 	userID, err := strconv.Atoi(id)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(apperror.ErrCantConvertID))
+		writeError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -60,20 +59,17 @@ func (h *handler) GetUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		switch err {
 		case apperror.ErrNotFound:
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte(err.Error()))
+			writeError(w, err, http.StatusNotFound)
 			return
 		default:
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(apperror.ErrUnpredictedInternal))
+			writeError(w, err, http.StatusInternalServerError)
 			return
 		}
 	}
 
 	userBytes, err := json.Marshal(user)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(apperror.ErrUnpredictedInternal))
+		writeError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -84,25 +80,21 @@ func (h *handler) GetUser(w http.ResponseWriter, r *http.Request) {
 func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	//decoding data to create user dto
 	var crUser *models.CreateUserDTO
 	defer r.Body.Close()
 	if err := json.NewDecoder(r.Body).Decode(&crUser); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(apperror.ErrInvalidJSONScheme))
+		writeError(w, err, http.StatusBadRequest)
 		return
 	}
 
 	if err := crUser.ValidateFields(); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(apperror.ErrAllFieldsMustBeFilled))
+		writeError(w, err, http.StatusBadRequest)
 		return
 	}
 
 	userID, err := h.service.Create(r.Context(), crUser)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(apperror.ErrUnpredictedInternal))
+		writeError(w, err, http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Location", fmt.Sprintf("%s/%d", usersURL, userID))
@@ -115,28 +107,24 @@ func (h *handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	var dto *models.SignInUserDTO
 
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(apperror.ErrInvalidJSONScheme))
+		writeError(w, err, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()
 
 	if err := dto.ValidateFields(); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(apperror.ErrAllFieldsMustBeFilled))
+		writeError(w, err, http.StatusBadRequest)
 		return
 	}
 
 	user, err := h.service.SignIn(r.Context(), dto)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(apperror.ErrUnpredictedInternal))
+		writeError(w, err, http.StatusInternalServerError)
 		return
 	}
 	userBytes, err := json.Marshal(user)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(apperror.ErrUnpredictedInternal))
+		writeError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -190,3 +178,9 @@ func (h *handler) SignIn(w http.ResponseWriter, r *http.Request) {
 //
 //	return nil
 //}
+
+func writeError(w http.ResponseWriter, err error, statusCode int) {
+	w.WriteHeader(statusCode)
+	w.Write([]byte(err.Error()))
+	return
+}

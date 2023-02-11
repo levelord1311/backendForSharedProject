@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/levelord1311/backendForSharedProject/user_service/internal/apperror"
@@ -29,6 +30,7 @@ var (
 		CreatedAt:         time.Time{},
 		RedactedAt:        time.Time{},
 	}
+	internalServiceErr = errors.New("internal service error")
 )
 
 type stubService struct {
@@ -66,7 +68,7 @@ func TestHandler_GetUser(t *testing.T) {
 		name           string
 		idParam        string
 		wantStatusCode int
-		err            error
+		serviceErr     error
 	}{
 		{
 			name:           "passing correct parameter",
@@ -87,26 +89,25 @@ func TestHandler_GetUser(t *testing.T) {
 			name:           "passing parameter inconvertible to int",
 			idParam:        "1a2b3c",
 			wantStatusCode: http.StatusBadRequest,
-			err:            apperror.ErrCantConvertID,
 		},
 		{
 			name:           "user with such id is not found",
 			idParam:        "666",
 			wantStatusCode: http.StatusNotFound,
-			err:            apperror.ErrNotFound,
+			serviceErr:     apperror.ErrNotFound,
 		},
 		{
 			name:           "unexpected internal error",
 			idParam:        "1",
 			wantStatusCode: http.StatusInternalServerError,
-			err:            apperror.ErrUnpredictedInternal,
+			serviceErr:     internalServiceErr,
 		},
 	}
 
 	for _, test := range cases {
 		t.Run(test.name, func(t *testing.T) {
 
-			h.service = &stubService{err: test.err}
+			h.service = &stubService{err: test.serviceErr}
 
 			url := fmt.Sprintf("%s/%s", usersURL, test.idParam)
 			w := httptest.NewRecorder()
@@ -123,10 +124,14 @@ func TestHandler_GetUser(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			assert.Equal(t, test.wantStatusCode, response.StatusCode)
 
-			if test.err != nil {
-				assert.Equal(t, test.err.Error(), string(body))
+			assert.Equal(t, test.wantStatusCode, response.StatusCode)
+			if test.wantStatusCode == http.StatusBadRequest {
+				return
+			}
+
+			if test.serviceErr != nil {
+				assert.Equal(t, test.serviceErr.Error(), string(body))
 				return
 			}
 
@@ -152,7 +157,7 @@ func TestHandler_CreateUser(t *testing.T) {
 		name           string
 		requestBody    any
 		wantStatusCode int
-		err            error
+		serviceErr     error
 	}{
 		{
 			name: "create user",
@@ -220,14 +225,14 @@ func TestHandler_CreateUser(t *testing.T) {
 				Password: "somePassword",
 			},
 			wantStatusCode: http.StatusInternalServerError,
-			err:            apperror.ErrUnpredictedInternal,
+			serviceErr:     internalServiceErr,
 		},
 	}
 
 	for _, test := range cases {
 		t.Run(test.name, func(t *testing.T) {
 
-			s := &stubService{err: test.err}
+			s := &stubService{err: test.serviceErr}
 			h := NewHandler(s)
 
 			dataBytes, err := json.Marshal(test.requestBody)
@@ -252,12 +257,16 @@ func TestHandler_CreateUser(t *testing.T) {
 
 			assert.Equal(t, test.wantStatusCode, response.StatusCode)
 
-			if test.err != nil {
-				assert.Equal(t, test.err.Error(), string(body))
+			if test.serviceErr != nil {
+				assert.Equal(t, test.serviceErr.Error(), string(body))
 				return
 			}
 
-			// TODO нет асссерта на хеадер
+			if test.wantStatusCode == http.StatusCreated {
+				header := response.Header.Get("Location")
+				want := fmt.Sprintf("%s/%d", usersURL, exampleUserReturn.ID)
+				assert.Equal(t, want, header)
+			}
 
 		})
 	}
@@ -270,7 +279,7 @@ func TestHandler_SignIn(t *testing.T) {
 		name           string
 		requestBody    any
 		wantStatusCode int
-		err            error
+		serviceErr     error
 	}{
 		{
 			name: "successful login",
@@ -279,7 +288,6 @@ func TestHandler_SignIn(t *testing.T) {
 				Password: "somePassword",
 			},
 			wantStatusCode: http.StatusOK,
-			err:            nil,
 		},
 		{
 			name: "another successful login",
@@ -288,7 +296,6 @@ func TestHandler_SignIn(t *testing.T) {
 				Password: "otherPassword",
 			},
 			wantStatusCode: http.StatusOK,
-			err:            nil,
 		},
 		{
 			name: "empty field: login",
@@ -297,7 +304,6 @@ func TestHandler_SignIn(t *testing.T) {
 				Password: "somePassword",
 			},
 			wantStatusCode: http.StatusBadRequest,
-			err:            apperror.ErrAllFieldsMustBeFilled,
 		},
 		{
 			name: "empty field: password",
@@ -306,29 +312,27 @@ func TestHandler_SignIn(t *testing.T) {
 				Password: "",
 			},
 			wantStatusCode: http.StatusBadRequest,
-			err:            apperror.ErrAllFieldsMustBeFilled,
 		},
 		{
 			name:           "wrong data",
 			requestBody:    "some data",
 			wantStatusCode: http.StatusBadRequest,
-			err:            apperror.ErrInvalidJSONScheme,
 		},
 		{
-			name: "unexpected server error",
+			name: "service error",
 			requestBody: &models.SignInUserDTO{
 				Login:    "someLogin",
 				Password: "somePassword",
 			},
 			wantStatusCode: http.StatusInternalServerError,
-			err:            apperror.ErrUnpredictedInternal,
+			serviceErr:     internalServiceErr,
 		},
 	}
 
 	for _, test := range cases {
 		t.Run(test.name, func(t *testing.T) {
 
-			s := &stubService{err: test.err}
+			s := &stubService{err: test.serviceErr}
 			h := NewHandler(s)
 
 			rBody, err := json.Marshal(test.requestBody)
@@ -352,9 +356,12 @@ func TestHandler_SignIn(t *testing.T) {
 			}
 
 			assert.Equal(t, test.wantStatusCode, response.StatusCode)
+			if test.wantStatusCode == http.StatusBadRequest {
+				return
+			}
 
-			if test.err != nil {
-				assert.Equal(t, test.err.Error(), string(body))
+			if test.serviceErr != nil {
+				assert.Equal(t, test.serviceErr.Error(), string(body))
 				return
 			}
 

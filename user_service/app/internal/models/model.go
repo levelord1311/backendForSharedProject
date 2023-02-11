@@ -108,8 +108,8 @@ func encryptString(s string) (string, error) {
 func (dto *CreateUserDTO) ValidateFields() error {
 	return validation.ValidateStruct(dto,
 		validation.Field(&dto.Username, validation.Required),
-		validation.Field(&dto.Email, validation.Required),
-		validation.Field(&dto.Password, validation.Required),
+		validation.Field(&dto.Email, validation.Required, is.Email),
+		validation.Field(&dto.Password, validation.Required, validation.Length(6, 100)),
 	)
 }
 
