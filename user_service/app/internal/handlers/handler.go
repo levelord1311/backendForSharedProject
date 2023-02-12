@@ -87,11 +87,6 @@ func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := crUser.ValidateFields(); err != nil {
-		writeError(w, err, http.StatusBadRequest)
-		return
-	}
-
 	userID, err := h.service.Create(r.Context(), crUser)
 	if err != nil {
 		writeError(w, err, http.StatusInternalServerError)
@@ -111,11 +106,6 @@ func (h *handler) SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer r.Body.Close()
-
-	if err := dto.ValidateFields(); err != nil {
-		writeError(w, err, http.StatusBadRequest)
-		return
-	}
 
 	user, err := h.service.SignIn(r.Context(), dto)
 	if err != nil {

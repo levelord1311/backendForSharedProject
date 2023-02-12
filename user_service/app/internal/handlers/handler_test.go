@@ -30,7 +30,7 @@ var (
 		CreatedAt:         time.Time{},
 		RedactedAt:        time.Time{},
 	}
-	internalServiceErr = errors.New("internal service error")
+	ServiceErr = errors.New("internal service error")
 )
 
 type stubService struct {
@@ -100,7 +100,7 @@ func TestHandler_GetUser(t *testing.T) {
 			name:           "unexpected internal error",
 			idParam:        "1",
 			wantStatusCode: http.StatusInternalServerError,
-			serviceErr:     internalServiceErr,
+			serviceErr:     ServiceErr,
 		},
 	}
 
@@ -178,33 +178,6 @@ func TestHandler_CreateUser(t *testing.T) {
 			wantStatusCode: http.StatusCreated,
 		},
 		{
-			name: "empty username",
-			requestBody: models.CreateUserDTO{
-				Username: "",
-				Email:    "other@email.org",
-				Password: "otherPassword",
-			},
-			wantStatusCode: http.StatusBadRequest,
-		},
-		{
-			name: "empty email",
-			requestBody: models.CreateUserDTO{
-				Username: "someUsername",
-				Email:    "",
-				Password: "somePassword",
-			},
-			wantStatusCode: http.StatusBadRequest,
-		},
-		{
-			name: "empty password",
-			requestBody: models.CreateUserDTO{
-				Username: "someUsername",
-				Email:    "some@email.org",
-				Password: "",
-			},
-			wantStatusCode: http.StatusBadRequest,
-		},
-		{
 			name: "wrong data",
 			requestBody: struct {
 				id      int
@@ -215,7 +188,8 @@ func TestHandler_CreateUser(t *testing.T) {
 				name:    "Ivan",
 				surname: "Grozny",
 			},
-			wantStatusCode: http.StatusBadRequest,
+			wantStatusCode: http.StatusInternalServerError,
+			serviceErr:     ServiceErr,
 		},
 		{
 			name: "service error",
@@ -225,7 +199,7 @@ func TestHandler_CreateUser(t *testing.T) {
 				Password: "somePassword",
 			},
 			wantStatusCode: http.StatusInternalServerError,
-			serviceErr:     internalServiceErr,
+			serviceErr:     ServiceErr,
 		},
 	}
 
@@ -298,22 +272,6 @@ func TestHandler_SignIn(t *testing.T) {
 			wantStatusCode: http.StatusOK,
 		},
 		{
-			name: "empty field: login",
-			requestBody: &models.SignInUserDTO{
-				Login:    "",
-				Password: "somePassword",
-			},
-			wantStatusCode: http.StatusBadRequest,
-		},
-		{
-			name: "empty field: password",
-			requestBody: &models.SignInUserDTO{
-				Login:    "someLogin",
-				Password: "",
-			},
-			wantStatusCode: http.StatusBadRequest,
-		},
-		{
 			name:           "wrong data",
 			requestBody:    "some data",
 			wantStatusCode: http.StatusBadRequest,
@@ -325,7 +283,7 @@ func TestHandler_SignIn(t *testing.T) {
 				Password: "somePassword",
 			},
 			wantStatusCode: http.StatusInternalServerError,
-			serviceErr:     internalServiceErr,
+			serviceErr:     ServiceErr,
 		},
 	}
 

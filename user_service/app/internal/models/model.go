@@ -105,24 +105,16 @@ func encryptString(s string) (string, error) {
 	return string(b), nil
 }
 
-func (dto *CreateUserDTO) ValidateFields() error {
-	return validation.ValidateStruct(dto,
-		validation.Field(&dto.Username, validation.Required),
-		validation.Field(&dto.Email, validation.Required, is.Email),
-		validation.Field(&dto.Password, validation.Required, validation.Length(6, 100)),
-	)
-}
-
-func (dto *SignInUserDTO) ValidateFields() error {
-	return validation.ValidateStruct(dto,
-		validation.Field(&dto.Login, validation.Required),
-		validation.Field(&dto.Password, validation.Required),
-	)
-}
-
 func (dto *UpdateUserDTO) ValidateFields() error {
 	return validation.ValidateStruct(dto,
 		validation.Field(&dto.OldPassword, validation.Required),
 		validation.Field(&dto.NewPassword, validation.Required),
 	)
+}
+
+func (dto *SignInUserDTO) LoginIsEmail() bool {
+	if validation.Validate(dto.Login, is.Email) == nil {
+		return true
+	}
+	return false
 }
